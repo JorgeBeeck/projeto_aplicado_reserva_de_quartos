@@ -1,7 +1,3 @@
-Claro! Abaixo está um script em Markdown com o passo a passo exato para os outros membros da equipe instalarem e configurarem o projeto em suas máquinas:
-
----
-
 # Instalação e Configuração do Projeto
 
 Este guia fornece instruções passo a passo para instalar e configurar o projeto em sua máquina local.
