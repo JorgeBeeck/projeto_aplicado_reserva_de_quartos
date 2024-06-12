@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { auth } from './firebase';
 import LoginPage from './pages/LoginPage';
 import RoomManagementPage from './pages/RoomManagementPage';
+import Sidebar from './components/Sidebar';
+import HomePage from './pages/HomePage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -19,18 +21,18 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>loading...</div>
   }
 
   return (
     <Router>
+      {user && <Sidebar isOpen />} {/* Sidebar visível quando o usuário está logado */}
       <Routes>
         <Route path="/" element={user ? <Navigate to="/rooms" /> : <LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/rooms"
-          element={user ? <RoomManagementPage /> : <Navigate to="/login" />}
-        />
+        <Route path="/rooms" element={user ? <RoomManagementPage /> : <Navigate to="/login" />} />
+        <Route path="/home" element={user ? <HomePage /> : <Navigate to="/login" />} />
+        {/* Adicionar mais rotas conforme necessário */}
       </Routes>
     </Router>
   );
