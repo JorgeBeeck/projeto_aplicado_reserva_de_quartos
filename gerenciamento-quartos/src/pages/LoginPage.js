@@ -9,14 +9,19 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Estado para controlar o carregamento
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Inicia o estado de carregamento
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/rooms');
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false); // Finaliza o estado de carregamento, independentemente do resultado
     }
   };
 
@@ -40,7 +45,9 @@ const LoginPage = () => {
           style={styles.input}
           required
         />
-        <button type="submit" style={styles.button}>Login</button>
+        <button type="submit" style={styles.button} disabled={isLoading}>
+          {isLoading ? 'Carregando...' : 'Login'}
+        </button>
       </form>
       {error && <p style={styles.error}>{error}</p>}
     </div>
