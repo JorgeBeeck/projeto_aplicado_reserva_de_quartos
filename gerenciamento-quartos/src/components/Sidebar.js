@@ -1,11 +1,16 @@
 // src/components/Sidebar.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 
-const Sidebar = ({ isOpen }) => {
+const Sidebar = () => {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   const sidebarStyles = {
     width: '200px',
@@ -13,7 +18,7 @@ const Sidebar = ({ isOpen }) => {
     height: '100vh',
     position: 'fixed',
     top: 0,
-    left: isOpen ? '0' : '-200px',
+    left: sidebarOpen ? '0' : '-200px',
     overflowX: 'hidden',
     transition: '0.3s',
     display: 'flex',
@@ -39,6 +44,7 @@ const Sidebar = ({ isOpen }) => {
     textDecoration: 'none',
     display: 'block',
     fontWeight: 'bold',
+    transition: 'color 0.3s',
   };
 
   const logoutStyles = {
@@ -48,7 +54,7 @@ const Sidebar = ({ isOpen }) => {
     fontWeight: 'bold',
     backgroundColor: '#d32f2f',
     padding: '10px 15px',
-    paddingBottom: '50px',
+    paddingBottom: '35px',
     borderRadius: '5px',
     marginTop: 'auto',
     width: '100%',
@@ -64,15 +70,43 @@ const Sidebar = ({ isOpen }) => {
     }
   };
 
+  const toggleButtonStyles = {
+    position: 'fixed',
+    top: '20px',
+    left: sidebarOpen ? '220px' : '20px',
+    width: '30px',
+    height: '25px',
+    display: 'flex',
+    transition: '0.3s',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    cursor: 'pointer',
+    zIndex: 1001,
+  };
+
+  const lineStyles = {
+    width: '100%',
+    height: '3px',
+    backgroundColor: '#333',
+    borderRadius: '2px',
+  };
+
   return (
-    <div style={sidebarStyles}>
-      <ul style={ulStyles}>
-        <li style={liStyles}><Link to="/home" style={linkStyles}>HomePage</Link></li>
-        <li style={liStyles}><Link to="/rooms" style={linkStyles}>Gerenciar Quartos</Link></li>
-        {/* Adicionar mais links conforme necessário */}
-      </ul>
-      <Link to="#" style={logoutStyles} onClick={handleLogout}>Sair</Link>
-    </div>
+    <>
+      <div style={sidebarStyles}>
+        <ul style={ulStyles}>
+          <li style={liStyles}><Link to="/home" style={linkStyles}>HomePage</Link></li>
+          <li style={liStyles}><Link to="/rooms" style={linkStyles}>Gerenciar Quartos</Link></li>
+        </ul>
+        <Link to="#" style={logoutStyles} onClick={handleLogout}>Deslogar</Link>
+      </div>
+      <div onClick={toggleSidebar} style={toggleButtonStyles}>
+        <div style={lineStyles}></div>
+        <div style={lineStyles}></div>
+        <div style={lineStyles}></div>
+      </div>
+    </>
   );
 };
 
