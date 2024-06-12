@@ -15,7 +15,7 @@ Certifique-se de ter o seguinte software instalado em sua máquina:
 1. **Clone o Repositório:**
 
    ```bash
-   git clone <URL_do_repositório>
+   git clone https://github.com/JorgeBeeck/projeto_aplicado_reserva_de_quartos.git
    ```
 
 2. **Navegue até o Diretório do Projeto:**
@@ -32,9 +32,7 @@ Certifique-se de ter o seguinte software instalado em sua máquina:
 
 4. **Configure o Firebase:**
 
-   - Crie um projeto no [Firebase Console](https://console.firebase.google.com/).
-   - Copie as configurações do SDK do Firebase para o arquivo `src/firebase.js`.
-   - Certifique-se de habilitar a autenticação por e-mail/senha no console do Firebase.
+   - Verifique seu acesso ao FIREBASE do projeto.
 
 5. **Execute o Projeto:**
 
@@ -48,12 +46,7 @@ Certifique-se de ter o seguinte software instalado em sua máquina:
 
    - Abra o navegador e acesse `http://localhost:3000`.
    - Você será redirecionado para a página de login. Faça login com uma conta válida.
-   - Após o login, você deve ser redirecionado para a página de gerenciamento de quartos.
 
 ## Suporte
 
 Se você encontrar algum problema durante a instalação ou configuração, sinta-se à vontade para entrar em contato com [Nome do Responsável] para obter ajuda.
-
----
-
-Com esse guia, os outros membros da equipe devem ser capazes de instalar e configurar o projeto em suas máquinas locais sem problemas. Se precisar de mais alguma coisa, estou aqui para ajudar!
