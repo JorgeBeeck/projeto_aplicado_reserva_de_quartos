@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+    apiKey: "AIzaSyAqP1V3xYhJA2_-L9tPZUB9IWO42l26eh4",
+    authDomain: "gestao-de-quartos.firebaseapp.com",
+    projectId: "gestao-de-quartos",
+    storageBucket: "gestao-de-quartos.appspot.com",
+    messagingSenderId: "384417841114",
+    appId: "1:384417841114:web:b504900d190982c788cae3"
+  };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
