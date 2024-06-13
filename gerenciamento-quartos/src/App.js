@@ -36,7 +36,7 @@ function App() {
     <Router>
       {user && <Sidebar isOpen />}
       <Routes>
-        <Route path="/" element={user ? <Navigate to="/rooms" /> : <LoginPage />} />
+        <Route path="/" element={user ? <Navigate to="/home" /> : <LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/rooms" element={user ? <RoomManagementPage /> : <Navigate to="/login" />} />
         <Route path="/home" element={user ? <HomePage /> : <Navigate to="/login" />} />

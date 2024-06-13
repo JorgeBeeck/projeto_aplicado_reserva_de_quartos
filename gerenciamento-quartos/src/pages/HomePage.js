@@ -4,7 +4,7 @@ import React from 'react';
 const HomePage = () => {
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Futura Dashboard</h1>
+      <h1 style={styles.title}>Futura Dashboard nova 2</h1>
     </div>
   );
 };
