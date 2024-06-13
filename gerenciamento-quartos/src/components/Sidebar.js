@@ -95,9 +95,12 @@ const Sidebar = () => {
   return (
     <>
       <div style={sidebarStyles}>
-        <ul style={ulStyles}>
+      <ul style={ulStyles}>
           <li style={liStyles}><Link to="/home" style={linkStyles}>HomePage</Link></li>
           <li style={liStyles}><Link to="/rooms" style={linkStyles}>Gerenciar Quartos</Link></li>
+          <li style={liStyles}><Link to="/register-client" style={linkStyles}>Cadastrar Cliente</Link></li>
+          <li style={liStyles}><Link to="/client-list" style={linkStyles}>Lista de Clientes</Link></li>
+          {/* Adicionar mais links conforme necessário */}
         </ul>
         <Link to="#" style={logoutStyles} onClick={handleLogout}>Deslogar</Link>
       </div>
