@@ -100,6 +100,9 @@ const Sidebar = () => {
           <li style={liStyles}><Link to="/rooms" style={linkStyles}>Gerenciar Quartos</Link></li>
           <li style={liStyles}><Link to="/register-client" style={linkStyles}>Cadastrar Cliente</Link></li>
           <li style={liStyles}><Link to="/client-list" style={linkStyles}>Lista de Clientes</Link></li>
+          <li style={liStyles}><Link to="/reserve-room" style={linkStyles}>Reservar quarto</Link></li>
+          <li style={liStyles}><Link to="/create-room" style={linkStyles}>Adicionar quarto</Link></li>
+
           {/* Adicionar mais links conforme necessário */}
         </ul>
         <Link to="#" style={logoutStyles} onClick={handleLogout}>Deslogar</Link>

@@ -8,6 +8,8 @@ import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import RegisterClientPage from './pages/RegisterClientPage';
 import ClientListPage from './pages/ClientListPage';
+import ReserveRoomPage from './pages/ReserveRoomPage';
+import CreateRoomPage from './pages/CreateRoomPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,6 +44,8 @@ function App() {
         <Route path="/home" element={user ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/register-client" element={user ? <RegisterClientPage /> : <Navigate to="/login" />} />
         <Route path="/client-list" element={user ? <ClientListPage /> : <Navigate to="/login" />} />
+        <Route path="/reserve-room" element={user ? <ReserveRoomPage /> : <Navigate to="/login" />} />
+        <Route path="/create-room" element={user ? <CreateRoomPage /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
