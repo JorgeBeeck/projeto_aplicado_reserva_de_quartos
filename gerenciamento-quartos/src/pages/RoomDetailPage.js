@@ -15,7 +15,7 @@ const RoomDetailPage = () => {
     precoPorNoite: 0,
     ocupacaoMaxima: 0,
     imagemUrl: '',
-    amenidades: [],
+    amenidades: '',
   });
 
   useEffect(() => {
@@ -155,24 +155,24 @@ const RoomDetailPage = () => {
         </div>
       </div>
 
-      <h2 style={styles.subtitle}>Histórico de Reservas</h2>
+      <h1 style={styles.title}>Histórico de Reservas {quarto.nome}</h1>
       {quarto.reservas && quarto.reservas.length > 0 ? (
         <table style={styles.table}>
           <thead>
-            <tr>
-              <th>ID da Reserva</th>
-              <th>Data de Check-in</th>
-              <th>Data de Check-out</th>
-              <th>Cliente ID</th>
+            <tr style={styles.tableRow}>
+              <th style={styles.tableHead}>ID da Reserva</th>
+              <th style={styles.tableHead}>Data de Check-in</th>
+              <th style={styles.tableHead}>Data de Check-out</th>
+              <th style={styles.tableHead}>Cliente ID</th>
             </tr>
           </thead>
           <tbody>
             {quarto.reservas.map((reserva, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{formatDate(reserva.dataInicio)}</td>
-                <td>{formatDate(reserva.dataFim)}</td>
-                <td>{reserva.clienteId}</td>
+              <tr key={index} style={styles.tableRow}>
+                <td style={styles.tableCell}>{index + 1}</td>
+                <td style={styles.tableCell}>{formatDate(reserva.dataInicio)}</td>
+                <td style={styles.tableCell}>{formatDate(reserva.dataFim)}</td>
+                <td style={styles.tableCell}>{reserva.clienteId}</td>
               </tr>
             ))}
           </tbody>
@@ -247,6 +247,22 @@ const styles = {
     borderRadius: '8px',
     marginTop: '10px',
   },
+  tableRow: {
+    borderBottom: '1px solid #ddd',
+  },
+  tableHead: {
+    padding: '12px 15px',
+    textAlign: 'left',
+    fontWeight: 'bold',
+    color: '#333',
+    backgroundColor: '#f2f2f2',
+    borderBottom: '1px solid #ddd',
+  },
+  tableCell: {
+    padding: '10px 15px',
+    verticalAlign: 'top',
+    color: '#555',
+  },
   error: {
     color: 'red',
     marginTop: '0.5rem',
@@ -254,5 +270,3 @@ const styles = {
 };
 
 export default RoomDetailPage;
-
-   
