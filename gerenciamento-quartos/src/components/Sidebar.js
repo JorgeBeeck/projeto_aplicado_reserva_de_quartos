@@ -1,4 +1,3 @@
-// src/components/Sidebar.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -13,12 +12,12 @@ const Sidebar = () => {
   };
 
   const sidebarStyles = {
-    width: '200px',
-    backgroundColor: '#333',
+    width: '220px',
+    backgroundColor: '#F79A87',
     height: '100vh',
     position: 'fixed',
     top: 0,
-    left: sidebarOpen ? '0' : '-200px',
+    left: sidebarOpen ? '0' : '-220px',
     overflowX: 'hidden',
     transition: '0.3s',
     display: 'flex',
@@ -35,8 +34,9 @@ const Sidebar = () => {
   };
 
   const liStyles = {
-    padding: '10px 15px',
-    width: '100%',
+    marginBottom: '10px',
+    width: '90%',
+    margin: '10px auto', // Adiciona margem entre os itens
   };
 
   const linkStyles = {
@@ -44,7 +44,15 @@ const Sidebar = () => {
     textDecoration: 'none',
     display: 'block',
     fontWeight: 'bold',
-    transition: 'color 0.3s',
+    transition: 'background-color 0.3s, color 0.3s',
+    padding: '15px',
+    borderRadius: '8px',
+    textAlign: 'center',
+  };
+
+  const linkHoverStyles = {
+    backgroundColor: '#FFB4A9',
+    color: '#333',
   };
 
   const logoutStyles = {
@@ -53,10 +61,7 @@ const Sidebar = () => {
     display: 'block',
     fontWeight: 'bold',
     backgroundColor: '#d32f2f',
-    padding: '10px 15px',
-    paddingBottom: '35px',
-    borderRadius: '5px',
-    marginTop: 'auto',
+    padding: '24px',
     width: '100%',
     textAlign: 'center',
   };
@@ -73,7 +78,7 @@ const Sidebar = () => {
   const toggleButtonStyles = {
     position: 'fixed',
     top: '20px',
-    left: sidebarOpen ? '220px' : '20px',
+    left: sidebarOpen ? '240px' : '20px',
     width: '30px',
     height: '25px',
     display: 'flex',
@@ -88,30 +93,37 @@ const Sidebar = () => {
   const lineStyles = {
     width: '100%',
     height: '3px',
-    backgroundColor: '#333',
+    backgroundColor: '#F15E5E',
     borderRadius: '2px',
   };
 
   return (
     <>
       <div style={sidebarStyles}>
-      <ul style={ulStyles}>
-          <li style={liStyles}><Link to="/home" style={linkStyles}>HomePage</Link></li>
-          <li style={liStyles}><Link to="/rooms" style={linkStyles}>Gerenciar Quartos</Link></li>
-          <li style={liStyles}><Link to="/register-client" style={linkStyles}>Cadastrar Cliente</Link></li>
-          <li style={liStyles}><Link to="/client-list" style={linkStyles}>Lista de Clientes</Link></li>
-          <li style={liStyles}><Link to="/reserve-room" style={linkStyles}>Reservar quarto</Link></li>
-          <li style={liStyles}><Link to="/create-room" style={linkStyles}>Adicionar quarto</Link></li>
-
+        <ul style={ulStyles}>
+          <li style={liStyles}><Link to="/home" style={linkStyles} className="sidebar-link">HomePage</Link></li>
+          <li style={liStyles}><Link to="/rooms" style={linkStyles} className="sidebar-link">Gerenciar Quartos</Link></li>
+          <li style={liStyles}><Link to="/register-client" style={linkStyles} className="sidebar-link">Cadastrar Cliente</Link></li>
+          <li style={liStyles}><Link to="/client-list" style={linkStyles} className="sidebar-link">Lista de Clientes</Link></li>
+          <li style={liStyles}><Link to="/reserve-room" style={linkStyles} className="sidebar-link">Reservar quarto</Link></li>
+          <li style={liStyles}><Link to="/create-room" style={linkStyles} className="sidebar-link">Adicionar quarto</Link></li>
           {/* Adicionar mais links conforme necessário */}
         </ul>
-        <Link to="#" style={logoutStyles} onClick={handleLogout}>Deslogar</Link>
+        <Link to="#" style={logoutStyles} onClick={handleLogout}>Sair</Link>
       </div>
       <div onClick={toggleSidebar} style={toggleButtonStyles}>
         <div style={lineStyles}></div>
         <div style={lineStyles}></div>
         <div style={lineStyles}></div>
       </div>
+      <style>
+        {`
+          .sidebar-link:hover {
+            background-color: #FFB4A9;
+            color: #333;
+          }
+        `}
+      </style>
     </>
   );
 };

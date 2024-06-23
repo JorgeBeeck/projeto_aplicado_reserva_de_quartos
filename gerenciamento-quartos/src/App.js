@@ -10,6 +10,7 @@ import RegisterClientPage from './pages/RegisterClientPage';
 import ClientListPage from './pages/ClientListPage';
 import ReserveRoomPage from './pages/ReserveRoomPage';
 import CreateRoomPage from './pages/CreateRoomPage';
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);

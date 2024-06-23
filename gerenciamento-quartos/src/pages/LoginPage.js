@@ -1,4 +1,3 @@
-// src/pages/LoginPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -27,29 +26,31 @@ const LoginPage = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Login</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          style={styles.input}
-          required
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          style={styles.input}
-          required
-        />
-        <button type="submit" style={styles.button} disabled={isLoading}>
-          {isLoading ? 'Carregando...' : 'Login'}
-        </button>
-      </form>
-      {error && <p style={styles.error}>{error}</p>}
+      <div style={styles.formContainer}>
+        <h1 style={styles.title}>Área do funcionario</h1>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            style={styles.input}
+            required
+          />
+          <input 
+            type="password" 
+            placeholder="Senha" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            style={styles.input}
+            required
+          />
+          <button type="submit" style={styles.button} disabled={isLoading}>
+            {isLoading ? 'Carregando...' : 'Entrar'}
+          </button>
+        </form>
+        {error && <p style={styles.error}>{error}</p>}
+      </div>
     </div>
   );
 };
@@ -62,7 +63,15 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    backgroundColor: '#f0f0f0',
+    width: '100vw',
+    backgroundColor: '#F79A87',
+  },
+  formContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: '8px',
+    margin: '48px',
+    padding: '32px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   title: {
     marginBottom: '1.5rem',
@@ -89,7 +98,7 @@ const styles = {
     padding: '0.75rem',
     fontSize: '1rem',
     color: '#fff',
-    backgroundColor: '#007bff',
+    backgroundColor: '#F15E5E',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
