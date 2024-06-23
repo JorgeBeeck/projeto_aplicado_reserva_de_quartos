@@ -1,4 +1,3 @@
-// src/pages/ClientListPage.js
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
@@ -102,7 +101,7 @@ const ClientListPage = () => {
           </thead>
           <tbody>
             {clients.map((client) => (
-              <tr key={client.id}>
+              <tr key={client.id} style={styles.row}>
                 <td style={styles.td}>{client.name}</td>
                 <td style={styles.td}>{client.cpf}</td>
                 <td style={styles.td}>{client.email}</td>
@@ -132,23 +131,32 @@ const styles = {
   table: {
     width: '100%',
     borderCollapse: 'collapse',
+    marginTop: '20px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   th: {
-    border: '1px solid #ddd',
-    padding: '8px',
     backgroundColor: '#f2f2f2',
     color: '#333',
     textAlign: 'left',
+    padding: '12px',
+    borderBottom: '1px solid #ddd',
   },
   td: {
-    border: '1px solid #ddd',
-    padding: '8px',
+    borderBottom: '1px solid #ddd',
+    padding: '12px',
+    textAlign: 'left',
+  },
+  row: {
+    transition: 'background-color 0.3s ease',
+    '&:hover': {
+      backgroundColor: '#f9f9f9',
+    },
   },
   editButton: {
     backgroundColor: '#4CAF50',
     color: 'white',
     border: 'none',
-    padding: '5px 10px',
+    padding: '8px 12px',
     textAlign: 'center',
     textDecoration: 'none',
     display: 'inline-block',
@@ -161,7 +169,7 @@ const styles = {
     backgroundColor: '#f44336',
     color: 'white',
     border: 'none',
-    padding: '5px 10px',
+    padding: '8px 12px',
     textAlign: 'center',
     textDecoration: 'none',
     display: 'inline-block',

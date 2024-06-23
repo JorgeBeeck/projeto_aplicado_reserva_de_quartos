@@ -1,3 +1,4 @@
+// src/components/Sidebar.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -5,10 +6,19 @@ import { auth } from '../firebase';
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Inicia a sidebar fechada
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   const sidebarStyles = {
@@ -18,12 +28,7 @@ const Sidebar = () => {
     position: 'fixed',
     top: 0,
     left: sidebarOpen ? '0' : '-220px',
-    overflowX: 'hidden',
     transition: '0.3s',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: '20px',
     zIndex: 1000,
   };
 
@@ -31,12 +36,11 @@ const Sidebar = () => {
     listStyleType: 'none',
     padding: 0,
     width: '100%',
+    marginTop: '20px', // Adiciona espaço acima da lista de links
   };
 
   const liStyles = {
     marginBottom: '10px',
-    width: '90%',
-    margin: '10px auto', // Adiciona margem entre os itens
   };
 
   const linkStyles = {
@@ -50,11 +54,6 @@ const Sidebar = () => {
     textAlign: 'center',
   };
 
-  const linkHoverStyles = {
-    backgroundColor: '#FFB4A9',
-    color: '#333',
-  };
-
   const logoutStyles = {
     color: '#fff',
     textDecoration: 'none',
@@ -62,17 +61,21 @@ const Sidebar = () => {
     fontWeight: 'bold',
     backgroundColor: '#d32f2f',
     padding: '24px',
-    width: '100%',
     textAlign: 'center',
+    marginTop: 'auto', // Coloca o link de logout na parte inferior
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate('/login');
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-    }
+  const overlayStyles = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: sidebarOpen ? '100%' : '0',
+    height: '100vh',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Cor de fundo semi-transparente
+    opacity: sidebarOpen ? '1' : '0',
+    transition: 'opacity 0.3s',
+    pointerEvents: sidebarOpen ? 'auto' : 'none', // Habilita ou desabilita interações com o overlay
+    zIndex: 999, // Coloca o overlay abaixo da sidebar
   };
 
   const toggleButtonStyles = {
@@ -116,6 +119,8 @@ const Sidebar = () => {
         <div style={lineStyles}></div>
         <div style={lineStyles}></div>
       </div>
+      {/* Overlay para cobrir a tela principal quando a sidebar estiver aberta */}
+      <div style={overlayStyles}></div>
       <style>
         {`
           .sidebar-link:hover {

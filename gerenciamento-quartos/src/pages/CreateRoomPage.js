@@ -1,4 +1,3 @@
-// src/pages/CreateRoomPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
@@ -41,70 +40,72 @@ const CreateRoomPage = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Criar Novo Quarto</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          style={styles.input}
-          required
-        />
-        <textarea
-          placeholder="Descrição"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          style={styles.input}
-          required
-        ></textarea>
-        <input
-          type="number"
-          placeholder="Ocupação Máxima"
-          value={ocupacaoMaxima}
-          onChange={(e) => setOcupacaoMaxima(e.target.value)}
-          min="1"
-          style={styles.input}
-          required
-        />
-        <select
-          value={disponibilidade}
-          onChange={(e) => setDisponibilidade(e.target.value === 'true')}
-          style={styles.input}
-          required
-        >
-          <option value="true">Disponível</option>
-          <option value="false">Indisponível</option>
-        </select>
-        <input
-          type="number"
-          placeholder="Preço por Noite"
-          value={precoPorNoite}
-          onChange={(e) => setPrecoPorNoite(e.target.value)}
-          step="0.01"
-          min="0"
-          style={styles.input}
-          required
-        />
-        <textarea
-          placeholder="Amenidades (separadas por vírgula)"
-          value={amenidades}
-          onChange={(e) => setAmenidades(e.target.value.split(',').map(item => item.trim()))}
-          style={styles.input}
-          required
-        ></textarea>
-        <input
-          type="text"
-          placeholder="URL da Imagem"
-          value={imagemUrl}
-          onChange={(e) => setImagemUrl(e.target.value)}
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>
-          {loading ? 'Carregando...' : 'Criar Quarto'}
-        </button>
-      </form>
-      {error && <p style={styles.error}>{error}</p>}
+      <div style={styles.formContainer}>
+        <h1 style={styles.title}>Adicionar Novo Quarto</h1>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <input
+            type="text"
+            placeholder="Nome"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            style={styles.input}
+            required
+          />
+          <textarea
+            placeholder="Descrição"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            style={styles.input}
+            required
+          ></textarea>
+          <input
+            type="number"
+            placeholder="Ocupação Máxima"
+            value={ocupacaoMaxima}
+            onChange={(e) => setOcupacaoMaxima(e.target.value)}
+            min="1"
+            style={styles.input}
+            required
+          />
+          <select
+            value={disponibilidade}
+            onChange={(e) => setDisponibilidade(e.target.value === 'true')}
+            style={styles.input}
+            required
+          >
+            <option value="true">Disponível</option>
+            <option value="false">Indisponível</option>
+          </select>
+          <input
+            type="number"
+            placeholder="Preço por Noite"
+            value={precoPorNoite}
+            onChange={(e) => setPrecoPorNoite(e.target.value)}
+            step="0.01"
+            min="0"
+            style={styles.input}
+            required
+          />
+          <textarea
+            placeholder="Amenidades (separadas por vírgula)"
+            value={amenidades}
+            onChange={(e) => setAmenidades(e.target.value.split(',').map(item => item.trim()))}
+            style={styles.input}
+            required
+          ></textarea>
+          <input
+            type="text"
+            placeholder="URL da Imagem"
+            value={imagemUrl}
+            onChange={(e) => setImagemUrl(e.target.value)}
+            style={styles.input}
+          />
+          <button type="submit" style={styles.button} disabled={loading}>
+            {loading ? 'Carregando...' : 'Criar Quarto'}
+          </button>
+        </form>
+        {error && <p style={styles.error}>{error}</p>}
+      </div>
     </div>
   );
 };
@@ -116,15 +117,25 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    backgroundColor: '#f0f0f0',
+    width: '100vw',
+  },
+  formContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: '8px',
+    margin: '48px',
+    padding: '32px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    width: '300px',
+    maxWidth: '90%',
   },
   title: {
     marginBottom: '1.5rem',
     fontFamily: 'Arial, sans-serif',
     color: '#333',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   form: {
-    width: '300px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -143,7 +154,7 @@ const styles = {
     padding: '0.75rem',
     fontSize: '1rem',
     color: '#fff',
-    backgroundColor: '#007bff',
+    backgroundColor: '#F15E5E',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
@@ -151,6 +162,7 @@ const styles = {
   error: {
     color: 'red',
     marginTop: '0.5rem',
+    textAlign: 'center',
   },
 };
 
