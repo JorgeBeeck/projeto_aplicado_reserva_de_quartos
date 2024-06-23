@@ -12,6 +12,9 @@ const ReserveRoomPage = () => {
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [reservaData, setReservaData] = useState(null);
+
 
   // Carregar lista de clientes disponíveis
   useEffect(() => {
@@ -83,92 +86,147 @@ const ReserveRoomPage = () => {
     }
   };
 
-  // Submeter o formulário para buscar quartos disponíveis
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!dataInicio || !dataFim || !clienteSelecionado) {
-      alert('Por favor, selecione as datas de início, fim e um cliente para continuar.');
+// Submeter o formulário para buscar quartos disponíveis
+const handleSubmit = (e) => {
+  e.preventDefault();
+  
+  // Verifica se as datas estão no passado
+  const hoje = new Date();
+  const dataInicioSelecionada = new Date(dataInicio);
+  const dataFimSelecionada = new Date(dataFim);
+  
+  if (dataInicioSelecionada < hoje || dataFimSelecionada < hoje) {
+    alert('Não é possível selecionar datas no passado. Por favor, selecione datas válidas.');
+    return;
+  }
+  
+  // Verifica se a data de início é igual à data de fim
+  if (dataInicioSelecionada.getTime() === dataFimSelecionada.getTime()) {
+    alert('A data de início não pode ser igual à data de fim. Por favor, selecione datas válidas.');
+    return;
+  }
+  
+  // Verifica se a data de início é posterior à data de fim
+  if (dataInicioSelecionada > dataFimSelecionada) {
+    alert('A data de início não pode ser posterior à data de fim. Por favor, selecione datas válidas.');
+    return;
+  }
+  
+  if (!dataInicio || !dataFim || !clienteSelecionado) {
+    alert('Por favor, selecione as datas de início, fim e um cliente para continuar.');
+    return;
+  }
+  
+  fetchQuartosDisponiveis();
+};
+
+const showReservaAlert = () => {
+  setShowAlert(true);
+};
+
+const hideReservaAlert = () => {
+  setShowAlert(false);
+};
+
+const handleReservarQuartoAlert = async (quartoId) => {
+  try {
+    if (!clienteSelecionado) {
+      alert('Por favor, selecione um cliente para fazer a reserva.');
       return;
     }
-    fetchQuartosDisponiveis();
-  };
+    const quartoRef = doc(db, 'quartos', quartoId); // Referência ao documento do quarto
+    const reserva = {
+      dataInicio: new Date(dataInicio),
+      dataFim: new Date(dataFim),
+      clienteId: clienteSelecionado
+    };
+    setReservaData(reserva);
+    showReservaAlert(); // Mostra o alerta com os dados da reserva
+  } catch (error) {
+    setError(error.message);
+    alert(`Erro ao reservar quarto: ${error.message}`);
+  }
+};
+
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Reservar Quarto</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <label>Data de Início:</label>
-        <input
-          type="date"
-          value={dataInicio}
-          onChange={(e) => setDataInicio(e.target.value)}
-          style={styles.input}
-          required
-        />
-        <label>Data de Fim:</label>
-        <input
-          type="date"
-          value={dataFim}
-          onChange={(e) => setDataFim(e.target.value)}
-          style={styles.input}
-          required
-        />
-        <label>Cliente:</label>
-        <select
-          value={clienteSelecionado}
-          onChange={(e) => setClienteSelecionado(e.target.value)}
-          style={styles.input}
-          required // Campo obrigatório
-        >
-          <option value="">Selecione um cliente</option>
-          {clientes.map(cliente => (
-            <option key={cliente.id} value={cliente.id}>
-              {cliente.name} - {cliente.email}
-            </option>
-          ))}
-        </select>
-        <button type="submit" style={styles.button}>
-          {loading ? 'Carregando...' : 'Buscar Quartos Disponíveis'}
-        </button>
-      </form>
-      {error && <p style={styles.error}>{error}</p>}
-      {quartosDisponiveis.length > 0 ? (
-        <div style={styles.quartosDisponiveis}>
-          <h2>Quartos Disponíveis:</h2>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Descrição</th>
-                <th>Preço por Noite</th>
-                <th>Amenidades</th>
-                <th>Imagem</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {quartosDisponiveis.map(quarto => (
-                <tr key={quarto.id}>
-                  <td style={styles.tableCell}>{quarto.id}</td>
-                  <td style={styles.tableCell}>{quarto.nome}</td>
-                  <td style={styles.tableCell}>{quarto.descricao}</td>
-                  <td style={styles.tableCell}>R$ {quarto.precoPorNoite.toFixed(2)}</td>
-                  <td style={styles.tableCell}>{quarto.amenidades.join(', ')}</td>
-                  <td style={styles.tableCell}><img src={quarto.imagemUrl} alt={quarto.nome} style={styles.quartoImage} /></td>
-                  <td style={styles.tableCell}>
-                    <button onClick={() => handleReservarQuarto(quarto.id)} style={styles.buttonReservar}>
-                      Reservar
-                    </button>
-                  </td>
+      <div style={styles.formContainer}>
+        <h1 style={styles.title}>Reservar Quarto</h1>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <label>Data de Início:</label>
+          <input
+            type="date"
+            value={dataInicio}
+            onChange={(e) => setDataInicio(e.target.value)}
+            style={styles.input}
+            required
+          />
+          <label>Data de Fim:</label>
+          <input
+            type="date"
+            value={dataFim}
+            onChange={(e) => setDataFim(e.target.value)}
+            style={styles.input}
+            required
+          />
+          <label>Cliente:</label>
+          <select
+            value={clienteSelecionado}
+            onChange={(e) => setClienteSelecionado(e.target.value)}
+            style={styles.input}
+            required // Campo obrigatório
+          >
+            <option value="">Selecione um cliente</option>
+            {clientes.map(cliente => (
+              <option key={cliente.id} value={cliente.id}>
+                {cliente.name} - {cliente.email}
+              </option>
+            ))}
+          </select>
+          <button type="submit" style={styles.button}>
+            {loading ? 'Carregando...' : 'Buscar Quartos Disponíveis'}
+          </button>
+        </form>
+        {error && <p style={styles.error}>{error}</p>}
+        {quartosDisponiveis.length > 0 ? (
+          <div style={styles.quartosDisponiveis}>
+            <h2>Quartos Disponíveis:</h2>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th style={styles.th}>ID</th>
+                  <th style={styles.th}>Nome</th>
+                  <th style={styles.th}>Descrição</th>
+                  <th style={styles.th}>Preço</th>
+                  <th style={styles.th}>Amenidades</th>
+                  <th style={styles.th}>Imagem</th>
+                  <th style={styles.th}>Ações</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        !loading && <p>Nenhum quarto disponível para as datas selecionadas.</p>
-      )}
+              </thead>
+              <tbody>
+                {quartosDisponiveis.map(quarto => (
+                  <tr key={quarto.id}>
+                    <td style={styles.td}>{quarto.id}</td>
+                    <td style={styles.td}>{quarto.nome}</td>
+                    <td style={styles.td}>{quarto.descricao}</td>
+                    <td style={styles.td}>R$ {quarto.precoPorNoite.toFixed(2)}</td>
+                    <td style={styles.td}>{quarto.amenidades.join(', ')}</td>
+                    <td style={styles.td}><img src={quarto.imagemUrl} alt={quarto.nome} style={styles.quartoImage} /></td>
+                    <td style={styles.td}>
+                      <button onClick={() => handleReservarQuarto(quarto.id)} style={styles.buttonReservar}>
+                        Reservar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          !loading && <p>Nenhum quarto disponível para as datas selecionadas.</p>
+        )}
+      </div>
     </div>
   );
 };
@@ -183,6 +241,14 @@ const styles = {
     backgroundColor: '#f0f0f0',
     padding: '20px',
   },
+  formContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: '8px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    padding: '20px',
+    width: '100%',
+    maxWidth: '800px',
+  },
   title: {
     marginBottom: '1.5rem',
     fontFamily: 'Arial, sans-serif',
@@ -190,8 +256,6 @@ const styles = {
   },
   form: {
     width: '100%',
-    maxWidth: '600px',
-    marginBottom: '20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '10px',
@@ -209,7 +273,7 @@ const styles = {
     padding: '0.75rem',
     fontSize: '1rem',
     color: '#fff',
-    backgroundColor: '#007bff',
+    backgroundColor: '#F15E5E',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
@@ -219,8 +283,6 @@ const styles = {
     marginTop: '0.5rem',
   },
   quartosDisponiveis: {
-    width: '100%',
-    maxWidth: '1200px',
     marginTop: '2rem',
     overflowX: 'auto', // Adiciona scroll horizontal caso haja muitos quartos
   },
@@ -229,26 +291,77 @@ const styles = {
     borderCollapse: 'collapse',
     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
   },
-  tableCell: {
+  th: {
     padding: '10px',
+    backgroundColor: '#f2f2f2',
+    color: '#333',
     textAlign: 'center',
   },
-  quartoImage: {
-    width: '100px', // Ajuste o tamanho da imagem conforme necessário
-    height: 'auto',
-    borderRadius: '4px',
-    display: 'block', // Garante que a imagem não crie espaços indesejados
-    margin: '0 auto', // Centraliza a imagem na célula da tabela
+  td: {
+    padding: '10px',
+    textAlign: 'center',
+    borderBottom: '1px solid #ddd',
   },
   buttonReservar: {
-    padding: '0.5rem 1rem',
+    padding: '0.5rem',
     fontSize: '0.875rem',
-    backgroundColor: '#28a745',
+    color: '#fff',
+    backgroundColor: '#F15E5E',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  },
+  quartoImage: {
+    maxWidth: '100px',
+    maxHeight: '100px',
+    objectFit: 'cover',
+    borderRadius: '4px',
+  },
+  modalContainer: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 999,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    padding: '20px',
+    maxWidth: '400px',
+    width: '100%',
+    textAlign: 'center',
+  },
+  modalTitle: {
+    margin: '0 0 10px 0',
+    color: '#333',
+  },
+  modalButtons: {
+    marginTop: '20px',
+  },
+  modalButtonConfirmar: {
+    padding: '10px 20px',
+    backgroundColor: '#4CAF50',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    marginRight: '10px',
+  },
+  modalButtonCancelar: {
+    padding: '10px 20px',
+    backgroundColor: '#F44336',
     color: '#fff',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
   },
+  
 };
 
 export default ReserveRoomPage;

@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { auth } from './firebase';
@@ -10,6 +9,7 @@ import RegisterClientPage from './pages/RegisterClientPage';
 import ClientListPage from './pages/ClientListPage';
 import ReserveRoomPage from './pages/ReserveRoomPage';
 import CreateRoomPage from './pages/CreateRoomPage';
+import RoomDetailPage from './pages/RoomDetailPage'; // Importe o RoomDetailPage
 import './App.css';
 
 function App() {
@@ -26,18 +26,20 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div className="loading-container">
-      <div className="spinner">
-        <span className="spinner-item"></span>
-        <span className="spinner-item"></span>
-        <span className="spinner-item"></span>
+    return (
+      <div className="loading-container">
+        <div className="spinner">
+          <span className="spinner-item"></span>
+          <span className="spinner-item"></span>
+          <span className="spinner-item"></span>
+        </div>
       </div>
-    </div>;
+    );
   }
 
   return (
     <Router>
-      {user && <Sidebar isOpen />}
+      {user && <Sidebar isOpen />} {/* Supondo que o Sidebar seja condicional ao usuário logado */}
       <Routes>
         <Route path="/" element={user ? <Navigate to="/home" /> : <LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -47,6 +49,7 @@ function App() {
         <Route path="/client-list" element={user ? <ClientListPage /> : <Navigate to="/login" />} />
         <Route path="/reserve-room" element={user ? <ReserveRoomPage /> : <Navigate to="/login" />} />
         <Route path="/create-room" element={user ? <CreateRoomPage /> : <Navigate to="/login" />} />
+        <Route path="/room-detail/:id" element={<RoomDetailPage />} /> {/* Nova rota para RoomDetailPage */}
       </Routes>
     </Router>
   );
