@@ -104,7 +104,7 @@ const styles = {
   },
   th: {
     padding: '12px',
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#F79A87',
     color: '#333',
     textAlign: 'center',
     borderBottom: '1px solid #ddd',
@@ -123,7 +123,7 @@ const styles = {
   },
   link: {
     textDecoration: 'none',
-    color: '#007BFF',
+    color: '#F79A87',
     cursor: 'pointer',
   },
   emptyMessage: {
