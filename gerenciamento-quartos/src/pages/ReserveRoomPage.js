@@ -237,7 +237,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: '100vh',
+    minHeight: '150vh',
     backgroundColor: '#f0f0f0',
     padding: '20px',
   },
