@@ -63,7 +63,7 @@ const HomePage = () => {
       <h2 style={styles.dateTitle}>Hoje é dia {getCurrentDate()}</h2>
       <div style={styles.gridContainer}>
         <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Total de Clientes do sistema: {clients.length}</h2>
+          <h2 style={styles.cardTitle}>Últimos 5 clientes cadastrados</h2>
           <div style={styles.cardContent}>
             {clients.length > 0 ? (
               <ul style={styles.list}>

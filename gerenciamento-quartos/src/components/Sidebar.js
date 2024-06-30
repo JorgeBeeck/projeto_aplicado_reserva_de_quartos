@@ -66,10 +66,10 @@ const Sidebar = () => {
     backgroundColor: '#595757',
     padding: '24px',
     textAlign: 'center',
+    borderRadius: '8px',
     marginTop: 'auto', // Coloca o link de logout na parte inferior
-    borderRadius: '8px', // Arredonda os cantos do botão
-    width: '80%', // Largura ajustada para o conteúdo do botão
-    marginBottom: '20px', // Espaçamento abaixo do botão
+    width: '50%', // Largura ajustada para o conteúdo do botão
+    marginBottom: '45px', // Espaçamento abaixo do botão
   };
 
   const toggleButtonStyles = {
