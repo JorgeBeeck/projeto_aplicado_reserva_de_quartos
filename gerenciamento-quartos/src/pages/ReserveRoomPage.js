@@ -247,7 +247,7 @@ const styles = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     padding: '20px',
     width: '100%',
-    maxWidth: '800px',
+    maxWidth: '1200px',
   },
   title: {
     marginBottom: '1.5rem',

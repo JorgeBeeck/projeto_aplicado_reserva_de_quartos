@@ -112,6 +112,7 @@ const styles = {
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   th: {
+    padding: '12px',
     backgroundColor: '#72B5A4',
     color: '#333',
     padding: '10px',
@@ -131,9 +132,25 @@ const styles = {
   link: {
     color: '#72B5A4',
     textDecoration: 'none',
-    '&:hover': {
+    color: '#F79A87',
+    cursor: 'pointer',
+  },
+  '&:hover': {
       textDecoration: 'underline',
     },
+  emptyMessage: {
+    textAlign: 'center',
+    marginTop: '20px',
+    color: '#888',
+  },
+  loading: {
+    textAlign: 'center',
+    marginTop: '20px',
+  },
+  error: {
+    color: 'red',
+    marginTop: '20px',
+    textAlign: 'center',
   },
   
 };
