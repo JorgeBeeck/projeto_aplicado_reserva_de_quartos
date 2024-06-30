@@ -75,6 +75,12 @@ const ReserveRoomPage = () => {
     return true;
   };
 
+  // Função para ajustar a data para meia-noite no horário local
+  const adjustDateToLocalMidnight = (dateString) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day, 0, 0, 0);
+  };
+
   // Reservar quarto selecionado com alerta de confirmação
   const handleReservarQuarto = async (quartoId) => {
     try {
@@ -83,8 +89,8 @@ const ReserveRoomPage = () => {
         return;
       }
       const reserva = {
-        dataInicio: new Date(dataInicio),
-        dataFim: new Date(dataFim),
+        dataInicio: adjustDateToLocalMidnight(dataInicio),
+        dataFim: adjustDateToLocalMidnight(dataFim),
         clienteId: clienteSelecionado,
         quartoId: quartoId // Adicione o ID do quarto na reserva
       };
@@ -220,7 +226,7 @@ const ReserveRoomPage = () => {
                     <td style={styles.td}><img src={quarto.imagemUrl} alt={quarto.nome} style={styles.quartoImage} /></td>
                     <td style={styles.td}>
                       <button onClick={() => handleReservarQuarto(quarto.id)} style={styles.buttonReservar}>
-                        Reservar
+                      Reservar
                       </button>
                     </td>
                   </tr>
@@ -380,7 +386,6 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
   },
-  
 };
 
 export default ReserveRoomPage;
