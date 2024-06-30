@@ -27,11 +27,12 @@ const LoginPage = () => {
   return (
     <div style={styles.container}>
       <div style={styles.formContainer}>
-        <h1 style={styles.title}>Área do funcionario</h1>
+        <h1 style={styles.title}>Área o funcionário</h1>
+        <h2 style={styles.title}>Login</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
           <input 
             type="email" 
-            placeholder="Email" 
+            placeholder="Digite seu e-mail" 
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
             style={styles.input}
@@ -39,7 +40,7 @@ const LoginPage = () => {
           />
           <input 
             type="password" 
-            placeholder="Senha" 
+            placeholder="Digite sua senha" 
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             style={styles.input}
@@ -98,7 +99,7 @@ const styles = {
     padding: '0.75rem',
     fontSize: '1rem',
     color: '#fff',
-    backgroundColor: '#F15E5E',
+    backgroundColor: '#72B5A4',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',

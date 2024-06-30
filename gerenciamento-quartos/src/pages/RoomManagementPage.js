@@ -75,57 +75,69 @@ const RoomManagementPage = () => {
 
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#f0f0f0',
     padding: '20px',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    fontFamily: 'Arial, sans-serif',
   },
   title: {
-    marginBottom: '1.5rem',
-    fontFamily: 'Arial, sans-serif',
-    color: '#333',
     textAlign: 'center',
+    marginTop: '100px',
+    marginBottom: '50px',
+    color: '#595757',
+  },
+  loading: {
+    textAlign: 'center',
+    fontSize: '18px',
+    color: '#666',
+  },
+  error: {
+    textAlign: 'center',
+    fontSize: '18px',
+    color: 'red',
+  },
+  emptyMessage: {
+    textAlign: 'center',
+    fontSize: '18px',
+    color: '#666',
   },
   tableContainer: {
-    width: '100%',
-    maxWidth: '800px',
-    marginTop: '20px',
     overflowX: 'auto',
   },
   table: {
+    padding: '20px',
     width: '100%',
     borderCollapse: 'collapse',
-    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-    backgroundColor: '#fff',
-    borderRadius: '8px',
+    marginTop: '20px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   th: {
     padding: '12px',
-    backgroundColor: '#F79A87',
+    backgroundColor: '#72B5A4',
     color: '#333',
-    textAlign: 'center',
-    borderBottom: '1px solid #ddd',
-    textTransform: 'uppercase',
+    padding: '10px',
+    borderBottom: '2px solid #ddd',
+    textAlign: 'left',
   },
   tr: {
-    transition: 'background-color 0.3s ease',
-    '&:hover': {
-      backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
+    '&:nth-of-type(even)': {
+      backgroundColor: '#f9f9f9',
     },
   },
   td: {
-    padding: '12px',
-    textAlign: 'center',
+    padding: '10px',
     borderBottom: '1px solid #ddd',
   },
   link: {
+    color: '#72B5A4',
     textDecoration: 'none',
     color: '#F79A87',
     cursor: 'pointer',
   },
+  '&:hover': {
+      textDecoration: 'underline',
+    },
   emptyMessage: {
     textAlign: 'center',
     marginTop: '20px',
@@ -140,6 +152,7 @@ const styles = {
     marginTop: '20px',
     textAlign: 'center',
   },
+  
 };
 
 export default RoomManagementPage;

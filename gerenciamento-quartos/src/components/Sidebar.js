@@ -63,7 +63,7 @@ const Sidebar = () => {
     textDecoration: 'none',
     display: 'block',
     fontWeight: 'bold',
-    backgroundColor: '#d32f2f',
+    backgroundColor: '#595757',
     padding: '24px',
     textAlign: 'center',
     marginTop: 'auto', // Coloca o link de logout na parte inferior
