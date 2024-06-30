@@ -12,6 +12,10 @@ const Sidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -120,7 +124,7 @@ const Sidebar = () => {
         <div style={lineStyles}></div>
       </div>
       {/* Overlay para cobrir a tela principal quando a sidebar estiver aberta */}
-      <div style={overlayStyles}></div>
+      <div style={overlayStyles} onClick={closeSidebar}></div>
       <style>
         {`
           .sidebar-link:hover {
