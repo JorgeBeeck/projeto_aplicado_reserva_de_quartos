@@ -237,7 +237,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: '150vh',
+    minHeight: '100vh',
     backgroundColor: '#f0f0f0',
     padding: '20px',
   },
@@ -247,7 +247,7 @@ const styles = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     padding: '20px',
     width: '100%',
-    maxWidth: '800px',
+    maxWidth: '1200px',
   },
   title: {
     marginBottom: '1.5rem',
