@@ -6,14 +6,10 @@ import { auth } from '../firebase';
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Inicia a sidebar fechada
+  const [sidebarOpen, setSidebarOpen] = useState(true); // Inicia a sidebar aberta
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
-  };
-
-  const closeSidebar = () => {
-    setSidebarOpen(false);
   };
 
   const handleLogout = async () => {
@@ -27,13 +23,17 @@ const Sidebar = () => {
 
   const sidebarStyles = {
     width: '220px',
-    backgroundColor: '#F79A87',
+    backgroundColor: '#72B5A4',
     height: '100vh',
     position: 'fixed',
     top: 0,
     left: sidebarOpen ? '0' : '-220px',
     transition: '0.3s',
     zIndex: 1000,
+    padding: '20px 0', // Adiciona padding no topo e na base da sidebar
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   };
 
   const ulStyles = {
@@ -67,19 +67,9 @@ const Sidebar = () => {
     padding: '24px',
     textAlign: 'center',
     marginTop: 'auto', // Coloca o link de logout na parte inferior
-  };
-
-  const overlayStyles = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: sidebarOpen ? '100%' : '0',
-    height: '100vh',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Cor de fundo semi-transparente
-    opacity: sidebarOpen ? '1' : '0',
-    transition: 'opacity 0.3s',
-    pointerEvents: sidebarOpen ? 'auto' : 'none', // Habilita ou desabilita interações com o overlay
-    zIndex: 999, // Coloca o overlay abaixo da sidebar
+    borderRadius: '8px', // Arredonda os cantos do botão
+    width: '80%', // Largura ajustada para o conteúdo do botão
+    marginBottom: '20px', // Espaçamento abaixo do botão
   };
 
   const toggleButtonStyles = {
@@ -95,6 +85,7 @@ const Sidebar = () => {
     alignItems: 'center',
     cursor: 'pointer',
     zIndex: 1001,
+    transform: sidebarOpen ? 'rotate(180deg)' : 'none', // Rotação para formar o 'X'
   };
 
   const lineStyles = {
@@ -102,29 +93,37 @@ const Sidebar = () => {
     height: '3px',
     backgroundColor: '#F15E5E',
     borderRadius: '2px',
+    transition: 'transform 0.3s', // Adiciona transição suave para a rotação
+  };
+
+  const diagonalLineStyles = {
+    transform: sidebarOpen ? 'rotate(45deg) translate(1px, 1px)' : 'rotate(0)',
+  };
+
+  const antiDiagonalLineStyles = {
+    transform: sidebarOpen ? 'rotate(-45deg) translate(-1px, 1px)' : 'rotate(0)',
   };
 
   return (
     <>
       <div style={sidebarStyles}>
+        <h2 style={{ color: '#fff', marginBottom: '20px' }}>Pousada Ypuã</h2>
         <ul style={ulStyles}>
-          <li style={liStyles}><Link to="/home" style={linkStyles} className="sidebar-link">HomePage</Link></li>
+          <li style={liStyles}><Link to="/home" style={linkStyles} className="sidebar-link">Dashboard</Link></li>
           <li style={liStyles}><Link to="/rooms" style={linkStyles} className="sidebar-link">Gerenciar Quartos</Link></li>
-          <li style={liStyles}><Link to="/register-client" style={linkStyles} className="sidebar-link">Cadastrar Cliente</Link></li>
-          <li style={liStyles}><Link to="/client-list" style={linkStyles} className="sidebar-link">Lista de Clientes</Link></li>
           <li style={liStyles}><Link to="/reserve-room" style={linkStyles} className="sidebar-link">Reservar quarto</Link></li>
           <li style={liStyles}><Link to="/create-room" style={linkStyles} className="sidebar-link">Adicionar quarto</Link></li>
+          <li style={liStyles}><Link to="/register-client" style={linkStyles} className="sidebar-link">Cadastrar Cliente</Link></li>
+          <li style={liStyles}><Link to="/client-list" style={linkStyles} className="sidebar-link">Lista de Clientes</Link></li>
           {/* Adicionar mais links conforme necessário */}
         </ul>
         <Link to="#" style={logoutStyles} onClick={handleLogout}>Sair</Link>
       </div>
       <div onClick={toggleSidebar} style={toggleButtonStyles}>
-        <div style={lineStyles}></div>
-        <div style={lineStyles}></div>
-        <div style={lineStyles}></div>
+        <div style={{ ...lineStyles, ...diagonalLineStyles }}></div>
+        <div style={{ ...lineStyles, opacity: sidebarOpen ? 0 : 1 }}></div>
+        <div style={{ ...lineStyles, ...antiDiagonalLineStyles }}></div>
       </div>
-      {/* Overlay para cobrir a tela principal quando a sidebar estiver aberta */}
-      <div style={overlayStyles} onClick={closeSidebar}></div>
       <style>
         {`
           .sidebar-link:hover {

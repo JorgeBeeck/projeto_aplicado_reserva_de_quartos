@@ -22,13 +22,15 @@ const ClientListPage = () => {
     fetchClients();
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, 'clientes', id));
-      setClients(clients.filter((client) => client.id !== id));
-      alert('Cliente removido com sucesso!');
-    } catch (error) {
-      alert(`Erro ao remover cliente: ${error.message}`);
+  const handleDelete = async (id, name) => {
+    if (window.confirm(`Tem certeza que deseja excluir o cliente ${name}?`)) {
+      try {
+        await deleteDoc(doc(db, 'clientes', id));
+        setClients(clients.filter((client) => client.id !== id));
+        alert('Cliente removido com sucesso!');
+      } catch (error) {
+        alert(`Erro ao remover cliente: ${error.message}`);
+      }
     }
   };
 
@@ -107,7 +109,7 @@ const ClientListPage = () => {
                 <td style={styles.td}>{client.email}</td>
                 <td style={styles.td}>
                   <button style={styles.editButton} onClick={() => handleEdit(client)}>Editar</button>
-                  <button style={styles.deleteButton} onClick={() => handleDelete(client.id)}>Excluir</button>
+                  <button style={styles.deleteButton} onClick={() => handleDelete(client.id, client.name)}>Excluir</button>
                 </td>
               </tr>
             ))}
@@ -135,7 +137,7 @@ const styles = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   th: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#72B5A4',
     color: '#333',
     textAlign: 'left',
     padding: '12px',
@@ -153,7 +155,7 @@ const styles = {
     },
   },
   editButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#72B5A4',
     color: 'white',
     border: 'none',
     padding: '8px 12px',

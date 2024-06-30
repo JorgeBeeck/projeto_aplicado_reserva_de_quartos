@@ -30,6 +30,7 @@ const LoginPage = () => {
         <h1 style={styles.title}>Área o funcionário</h1>
         <h2 style={styles.title}>Login</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
+          <label>Email</label>
           <input 
             type="email" 
             placeholder="Digite seu e-mail" 
@@ -38,6 +39,7 @@ const LoginPage = () => {
             style={styles.input}
             required
           />
+          <label>Senha</label>
           <input 
             type="password" 
             placeholder="Digite sua senha" 
@@ -51,6 +53,9 @@ const LoginPage = () => {
           </button>
         </form>
         {error && <p style={styles.error}>{error}</p>}
+      </div>
+      <div>
+      <h2 style={styles.title}>Caso não tenha suas credenciais, solicite para seu administrador</h2>
       </div>
     </div>
   );
@@ -71,7 +76,7 @@ const styles = {
     backgroundColor: '#FFFFFF',
     borderRadius: '8px',
     margin: '48px',
-    padding: '32px',
+    padding: '64px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   title: {

@@ -35,30 +35,39 @@ const RegisterClientPage = () => {
       <div style={styles.formContainer}>
         <h1 style={styles.title}>Cadastro de Cliente</h1>
         <form onSubmit={handleSubmit} style={styles.form}>
-          <input
-            type="text"
-            placeholder="Nome Completo"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={styles.input}
-            required
-          />
-          <input
-            type="text"
-            placeholder="CPF"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
-            style={styles.input}
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
-            required
-          />
+          <label style={styles.label}>
+            <p style={styles.labelText}>Nome Completo</p>
+            <input
+              type="text"
+              placeholder="Digite Seu Nome Completo"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={styles.input}
+              required
+            />
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>CPF</p>
+            <input
+              type="text"
+              placeholder="Digite seu CPF"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              style={styles.input}
+              required
+            />
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>Email</p>
+            <input
+              type="email"
+              placeholder="Digite Seu Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={styles.input}
+              required
+            />
+          </label>
           <button type="submit" style={styles.button} disabled={loading}>
             {loading ? 'Carregando...' : 'Cadastrar'}
           </button>
@@ -99,11 +108,21 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    width: '100%',
+  },
+  label: {
+    width: '100%',
+    marginBottom: '1rem',
+  },
+  labelText: {
+    marginBottom: '0.5rem',
+    fontFamily: 'Arial, sans-serif',
+    color: '#333',
+    textAlign: 'center'
   },
   input: {
     width: '100%',
     padding: '0.5rem',
-    marginBottom: '1rem',
     fontSize: '1rem',
     border: '1px solid #ccc',
     borderRadius: '4px',
@@ -114,7 +133,7 @@ const styles = {
     padding: '0.75rem',
     fontSize: '1rem',
     color: '#fff',
-    backgroundColor: '#F15E5E',
+    backgroundColor: '#72B5A4',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',

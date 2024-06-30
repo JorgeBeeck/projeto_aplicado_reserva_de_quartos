@@ -273,7 +273,7 @@ const styles = {
     padding: '0.75rem',
     fontSize: '1rem',
     color: '#fff',
-    backgroundColor: '#F15E5E',
+    backgroundColor: '#72B5A4',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',

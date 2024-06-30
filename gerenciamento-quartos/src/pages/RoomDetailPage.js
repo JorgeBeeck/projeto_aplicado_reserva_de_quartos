@@ -121,32 +121,32 @@ const RoomDetailPage = () => {
               <p><strong>Amenidades:</strong> {quarto.amenidades.join(', ')}</p>
             </>
           ) : (
-            <form onSubmit={handleSubmit}>
-              <label>
+            <form onSubmit={handleSubmit} style={styles.form}>
+              <label style={styles.label}>
                 Nome:
-                <input type="text" name="nome" value={formData.nome} onChange={handleChange} required />
+                <input type="text" name="nome" value={formData.nome} onChange={handleChange} required style={styles.input} />
               </label>
-              <label>
+              <label style={styles.label}>
                 Descrição:
-                <textarea name="descricao" value={formData.descricao} onChange={handleChange} required />
+                <textarea name="descricao" value={formData.descricao} onChange={handleChange} required style={styles.textarea} />
               </label>
-              <label>
+              <label style={styles.label}>
                 Preço por Noite:
-                <input type="number" name="precoPorNoite" value={formData.precoPorNoite} onChange={handleChange} required />
+                <input type="number" name="precoPorNoite" value={formData.precoPorNoite} onChange={handleChange} required style={styles.input} />
               </label>
-              <label>
+              <label style={styles.label}>
                 Ocupação Máxima:
-                <input type="number" name="ocupacaoMaxima" value={formData.ocupacaoMaxima} onChange={handleChange} required />
+                <input type="number" name="ocupacaoMaxima" value={formData.ocupacaoMaxima} onChange={handleChange} required style={styles.input} />
               </label>
-              <label>
+              <label style={styles.label}>
                 Amenidades (separadas por vírgula):
-                <input type="text" name="amenidades" value={formData.amenidades} onChange={handleChange} required />
+                <input type="text" name="amenidades" value={formData.amenidades} onChange={handleChange} required style={styles.input} />
               </label>
-              <label>
+              <label style={styles.label}>
                 URL da Imagem:
-                <input type="url" name="imagemUrl" value={formData.imagemUrl} onChange={handleChange} required />
+                <input type="url" name="imagemUrl" value={formData.imagemUrl} onChange={handleChange} required style={styles.input} />
               </label>
-              <button type="submit">Salvar</button>
+              <button type="submit" style={styles.saveButton}>Salvar</button>
             </form>
           )}
           {!editMode && (
@@ -224,8 +224,51 @@ const styles = {
     width: '100%',
     marginTop: '20px',
   },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center',
+    gap: '10px',
+    padding: '20%',
+  },
+  label: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    marginBottom: '5px',
+  },
+  input: {
+    padding: '8px',
+    width: '100%',
+    fontSize: '1rem',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    marginBottom: '10px',
+  },
+  textarea: {
+    padding: '8px',
+    width: '100%',
+    fontSize: '1rem',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    marginBottom: '10px',
+    resize: 'vertical',
+  },
+  saveButton: {
+    backgroundColor: '#72B5A4',
+    width: '100%',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    padding: '10px 20px',
+    cursor: 'pointer',
+    alignSelf: 'flex-start',
+    marginTop: '10px',
+  },
   editButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#72B5A4',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
@@ -255,7 +298,7 @@ const styles = {
     textAlign: 'left',
     fontWeight: 'bold',
     color: '#333',
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#72B5A4',
     borderBottom: '1px solid #ddd',
   },
   tableCell: {
@@ -270,3 +313,4 @@ const styles = {
 };
 
 export default RoomDetailPage;
+

@@ -26,7 +26,7 @@ const CreateRoomPage = () => {
         disponibilidade,
         precoPorNoite: parseFloat(precoPorNoite),
         amenidades,
-        imagemUrl
+        imagemUrl,
       });
       alert('Quarto criado com sucesso!');
       navigate('/rooms'); // Redireciona para a página de gerenciamento de quartos
@@ -43,63 +43,86 @@ const CreateRoomPage = () => {
       <div style={styles.formContainer}>
         <h1 style={styles.title}>Adicionar Novo Quarto</h1>
         <form onSubmit={handleSubmit} style={styles.form}>
-          <input
-            type="text"
-            placeholder="Nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            style={styles.input}
-            required
-          />
-          <textarea
-            placeholder="Descrição"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            style={styles.input}
-            required
-          ></textarea>
-          <input
-            type="number"
-            placeholder="Ocupação Máxima"
-            value={ocupacaoMaxima}
-            onChange={(e) => setOcupacaoMaxima(e.target.value)}
-            min="1"
-            style={styles.input}
-            required
-          />
-          <select
-            value={disponibilidade}
-            onChange={(e) => setDisponibilidade(e.target.value === 'true')}
-            style={styles.input}
-            required
-          >
-            <option value="true">Disponível</option>
-            <option value="false">Indisponível</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Preço por Noite"
-            value={precoPorNoite}
-            onChange={(e) => setPrecoPorNoite(e.target.value)}
-            step="0.01"
-            min="0"
-            style={styles.input}
-            required
-          />
-          <textarea
-            placeholder="Amenidades (separadas por vírgula)"
-            value={amenidades}
-            onChange={(e) => setAmenidades(e.target.value.split(',').map(item => item.trim()))}
-            style={styles.input}
-            required
-          ></textarea>
-          <input
-            type="text"
-            placeholder="URL da Imagem"
-            value={imagemUrl}
-            onChange={(e) => setImagemUrl(e.target.value)}
-            style={styles.input}
-          />
+          <label style={styles.label}>
+            <p style={styles.labelText}>Nome do Quarto</p>
+            <input
+              type="text"
+              placeholder="Digite o Nome Do Quarto"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              style={styles.input}
+              required
+            />
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>Descrição</p>
+            <textarea
+              placeholder="Digite Descrição"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              style={styles.input}
+              required
+            ></textarea>
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>Ocupação Máxima</p>
+            <input
+              type="number"
+              placeholder="Digite Ocupação Máxima"
+              value={ocupacaoMaxima}
+              onChange={(e) => setOcupacaoMaxima(e.target.value)}
+              min="1"
+              style={styles.input}
+              required
+            />
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>Disponibilidade</p>
+            <select
+              value={disponibilidade}
+              onChange={(e) => setDisponibilidade(e.target.value === 'true')}
+              style={styles.input}
+              required
+            >
+              <option value="true">Disponível</option>
+              <option value="false">Indisponível</option>
+            </select>
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>Preço por Noite</p>
+            <input
+              type="number"
+              placeholder="Digite Preço por Noite"
+              value={precoPorNoite}
+              onChange={(e) => setPrecoPorNoite(e.target.value)}
+              step="0.01"
+              min="0"
+              style={styles.input}
+              required
+            />
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>Amenidades (separadas por vírgula)</p>
+            <textarea
+              placeholder="Digite Amenidades (separadas por vírgula)"
+              value={amenidades}
+              onChange={(e) =>
+                setAmenidades(e.target.value.split(',').map((item) => item.trim()))
+              }
+              style={styles.input}
+              required
+            ></textarea>
+          </label>
+          <label style={styles.label}>
+            <p style={styles.labelText}>URL da Imagem</p>
+            <input
+              type="text"
+              placeholder="cole URL da Imagem"
+              value={imagemUrl}
+              onChange={(e) => setImagemUrl(e.target.value)}
+              style={styles.input}
+            />
+          </label>
           <button type="submit" style={styles.button} disabled={loading}>
             {loading ? 'Carregando...' : 'Criar Quarto'}
           </button>
@@ -116,6 +139,8 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: '48px',
+    paddingBottom: '48px',
     height: '100vh',
     width: '100vw',
   },
@@ -123,9 +148,9 @@ const styles = {
     backgroundColor: '#FFFFFF',
     borderRadius: '8px',
     margin: '48px',
-    padding: '32px',
+    padding: '24px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    width: '300px',
+    width: '480px',
     maxWidth: '90%',
   },
   title: {
@@ -140,10 +165,19 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
   },
+  label: {
+    width: '100%',
+    marginBottom: '1rem',
+  },
+  labelText: {
+    marginBottom: '0.5rem',
+    fontFamily: 'Arial, sans-serif',
+    color: '#333',
+    textAlign: 'center',
+  },
   input: {
     width: '100%',
     padding: '0.5rem',
-    marginBottom: '1rem',
     fontSize: '1rem',
     border: '1px solid #ccc',
     borderRadius: '4px',
@@ -154,7 +188,7 @@ const styles = {
     padding: '0.75rem',
     fontSize: '1rem',
     color: '#fff',
-    backgroundColor: '#F15E5E',
+    backgroundColor: '#72B5A4',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',

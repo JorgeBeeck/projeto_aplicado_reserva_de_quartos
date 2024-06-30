@@ -130,9 +130,8 @@ const styles = {
     borderBottom: '1px solid #ddd',
   },
   link: {
-    color: '#72B5A4',
     textDecoration: 'none',
-    color: '#F79A87',
+    color: '#72B5A4',
     cursor: 'pointer',
   },
   '&:hover': {

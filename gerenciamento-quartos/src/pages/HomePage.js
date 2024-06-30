@@ -1,4 +1,3 @@
-// src/pages/HomePage.js
 import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, query, orderBy, getDocs, limit, where } from 'firebase/firestore';
 
@@ -52,11 +51,19 @@ const HomePage = () => {
     fetchGrowthPercentage();
   }, []);
 
+  const getCurrentDate = () => {
+    const date = new Date();
+    return date.toLocaleDateString('pt-BR');
+  };
+
   return (
     <div style={styles.container}>
+      <h1 style={styles.welcomeTitle}>Olá, Colaborador!</h1>
+      <h1 style={styles.welcomeSubtitle}>Acesse o menu lateral para acessar as funções de gerenciamento do sistema</h1>
+      <h2 style={styles.dateTitle}>Hoje é dia {getCurrentDate()}</h2>
       <div style={styles.gridContainer}>
         <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Total de Clientes: {clients.length}</h2>
+          <h2 style={styles.cardTitle}>Total de Clientes do sistema: {clients.length}</h2>
           <div style={styles.cardContent}>
             {clients.length > 0 ? (
               <ul style={styles.list}>
@@ -73,7 +80,7 @@ const HomePage = () => {
         </div>
 
         <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Crescimento Mensal</h2>
+          <h2 style={styles.cardTitle}>Crescimento Mensal pousada Ypuã</h2>
           <div style={styles.cardContent}>
             <p style={styles.growthPercentage}>{growthPercentage}%</p>
           </div>
@@ -89,13 +96,26 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100vh',
+    minHeight: '100vh',
     padding: '20px',
+    backgroundColor: '#f0f0f0',
   },
-  title: {
+  welcomeTitle: {
     fontFamily: 'Arial, sans-serif',
-    fontSize: '3rem',
-    color: '#fff',
+    fontSize: '2.5rem',
+    color: '#333',
+    marginBottom: '10px',
+  },
+  welcomeSubtitle: {
+    fontFamily: 'Arial, sans-serif',
+    fontSize: '1.5rem',
+    color: '#333',
+    marginBottom: '10px',
+  },
+  dateTitle: {
+    fontFamily: 'Arial, sans-serif',
+    fontSize: '1.5rem',
+    color: '#666',
     marginBottom: '20px',
   },
   gridContainer: {
