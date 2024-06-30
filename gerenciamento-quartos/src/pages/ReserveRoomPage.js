@@ -14,7 +14,8 @@ const ReserveRoomPage = () => {
   const [error, setError] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [reservaData, setReservaData] = useState(null);
-
+  const [filtroCliente, setFiltroCliente] = useState('');
+  const [textoSelecionado, setTextoSelecionado] = useState('');
 
   // Carregar lista de clientes disponíveis
   useEffect(() => {
@@ -23,14 +24,27 @@ const ReserveRoomPage = () => {
         const clientesRef = collection(db, 'clientes');
         const snapshot = await getDocs(clientesRef);
         const clientesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setClientes(clientesData);
+        // Ordena os clientes por nome em ordem alfabética
+        setClientes(clientesData.sort((a, b) => a.name.localeCompare(b.name)));
       } catch (error) {
         setError(error.message);
       }
     };
-
+  
     fetchClientes();
   }, []);
+
+   // Filtrar clientes conforme a digitação no campo de busca
+   const filteredClientes = clientes.filter(cliente => 
+    cliente.name.toLowerCase().includes(filtroCliente.toLowerCase())
+  );
+
+    // Atualizar o filtro de cliente conforme o usuário digita
+    const handleInputChange = (e) => {
+      const text = e.target.value;
+      setFiltroCliente(text);
+      setTextoSelecionado(text); // Atualiza o estado com o texto digitado
+    };
 
   // Função para buscar quartos disponíveis com base nas datas selecionadas
   const fetchQuartosDisponiveis = async () => {
@@ -61,93 +75,84 @@ const ReserveRoomPage = () => {
     return true;
   };
 
-  // Reservar quarto selecionado
+  // Reservar quarto selecionado com alerta de confirmação
   const handleReservarQuarto = async (quartoId) => {
     try {
       if (!clienteSelecionado) {
         alert('Por favor, selecione um cliente para fazer a reserva.');
         return;
       }
-      const quartoRef = doc(db, 'quartos', quartoId); // Referência ao documento do quarto
       const reserva = {
         dataInicio: new Date(dataInicio),
         dataFim: new Date(dataFim),
-        clienteId: clienteSelecionado
+        clienteId: clienteSelecionado,
+        quartoId: quartoId // Adicione o ID do quarto na reserva
       };
+      setReservaData(reserva);
+      setShowAlert(true); // Mostrar o alerta de confirmação
+    } catch (error) {
+      setError(error.message);
+      alert(`Erro ao preparar a reserva: ${error.message}`);
+    }
+  };
+
+  // Confirmar a reserva
+  const confirmReserva = async () => {
+    try {
+      const { quartoId, dataInicio, dataFim, clienteId } = reservaData;
+      const quartoRef = doc(db, 'quartos', quartoId);
       await updateDoc(quartoRef, {
-        reservas: arrayUnion(reserva), // Adiciona a nova reserva ao array de reservas
-        disponibilidade: false // Marca o quarto como indisponível
+        reservas: arrayUnion({
+          dataInicio: dataInicio,
+          dataFim: dataFim,
+          clienteId: clienteId
+        }),
+        disponibilidade: false
       });
+      setShowAlert(false); // Fechar o alerta
       alert('Quarto reservado com sucesso!');
-      navigate('/'); // Redireciona para a página inicial após a reserva
+      navigate('/');
     } catch (error) {
       setError(error.message);
       alert(`Erro ao reservar quarto: ${error.message}`);
     }
   };
 
-// Submeter o formulário para buscar quartos disponíveis
-const handleSubmit = (e) => {
-  e.preventDefault();
-  
-  // Verifica se as datas estão no passado
-  const hoje = new Date();
-  const dataInicioSelecionada = new Date(dataInicio);
-  const dataFimSelecionada = new Date(dataFim);
-  
-  if (dataInicioSelecionada < hoje || dataFimSelecionada < hoje) {
-    alert('Não é possível selecionar datas no passado. Por favor, selecione datas válidas.');
-    return;
-  }
-  
-  // Verifica se a data de início é igual à data de fim
-  if (dataInicioSelecionada.getTime() === dataFimSelecionada.getTime()) {
-    alert('A data de início não pode ser igual à data de fim. Por favor, selecione datas válidas.');
-    return;
-  }
-  
-  // Verifica se a data de início é posterior à data de fim
-  if (dataInicioSelecionada > dataFimSelecionada) {
-    alert('A data de início não pode ser posterior à data de fim. Por favor, selecione datas válidas.');
-    return;
-  }
-  
-  if (!dataInicio || !dataFim || !clienteSelecionado) {
-    alert('Por favor, selecione as datas de início, fim e um cliente para continuar.');
-    return;
-  }
-  
-  fetchQuartosDisponiveis();
-};
+  // Cancelar a reserva
+  const cancelReserva = () => {
+    setShowAlert(false);
+    setReservaData(null);
+  };
 
-const showReservaAlert = () => {
-  setShowAlert(true);
-};
+  // Submeter o formulário para buscar quartos disponíveis
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const hoje = new Date();
+    const dataInicioSelecionada = new Date(dataInicio);
+    const dataFimSelecionada = new Date(dataFim);
 
-const hideReservaAlert = () => {
-  setShowAlert(false);
-};
-
-const handleReservarQuartoAlert = async (quartoId) => {
-  try {
-    if (!clienteSelecionado) {
-      alert('Por favor, selecione um cliente para fazer a reserva.');
+    if (dataInicioSelecionada < hoje || dataFimSelecionada < hoje) {
+      alert('Não é possível selecionar datas no passado. Por favor, selecione datas válidas.');
       return;
     }
-    const quartoRef = doc(db, 'quartos', quartoId); // Referência ao documento do quarto
-    const reserva = {
-      dataInicio: new Date(dataInicio),
-      dataFim: new Date(dataFim),
-      clienteId: clienteSelecionado
-    };
-    setReservaData(reserva);
-    showReservaAlert(); // Mostra o alerta com os dados da reserva
-  } catch (error) {
-    setError(error.message);
-    alert(`Erro ao reservar quarto: ${error.message}`);
-  }
-};
 
+    if (dataInicioSelecionada.getTime() === dataFimSelecionada.getTime()) {
+      alert('A data de início não pode ser igual à data de fim. Por favor, selecione datas válidas.');
+      return;
+    }
+
+    if (dataInicioSelecionada > dataFimSelecionada) {
+      alert('A data de início não pode ser posterior à data de fim. Por favor, selecione datas válidas.');
+      return;
+    }
+
+    if (!dataInicio || !dataFim || !clienteSelecionado) {
+      alert('Por favor, selecione as datas de início, fim e um cliente para continuar.');
+      return;
+    }
+
+    fetchQuartosDisponiveis();
+  };
 
   return (
     <div style={styles.container}>
@@ -175,7 +180,7 @@ const handleReservarQuartoAlert = async (quartoId) => {
             value={clienteSelecionado}
             onChange={(e) => setClienteSelecionado(e.target.value)}
             style={styles.input}
-            required // Campo obrigatório
+            required
           >
             <option value="">Selecione um cliente</option>
             {clientes.map(cliente => (
@@ -227,6 +232,20 @@ const handleReservarQuartoAlert = async (quartoId) => {
           !loading && <p>Nenhum quarto disponível para as datas selecionadas.</p>
         )}
       </div>
+
+      {showAlert && (
+        <div style={styles.modalContainer}>
+          <div style={styles.modalContent}>
+            <h2 style={styles.modalTitle}>Confirmar Reserva</h2>
+            <p>Data de Início: {reservaData.dataInicio.toLocaleDateString()}</p>
+            <p>Data de Fim: {reservaData.dataFim.toLocaleDateString()}</p>
+            <div style={styles.modalButtons}>
+              <button onClick={confirmReserva} style={styles.modalButtonConfirmar}>Confirmar</button>
+              <button onClick={cancelReserva} style={styles.modalButtonCancelar}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
