@@ -4,6 +4,7 @@ import { getFirestore, collection, query, orderBy, getDocs, limit, where } from 
 const HomePage = () => {
   const [clients, setClients] = useState([]);
   const [growthPercentage, setGrowthPercentage] = useState(0);
+  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -23,20 +24,20 @@ const HomePage = () => {
     const fetchGrowthPercentage = async () => {
       const db = getFirestore();
       const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1; // getMonth() retorna de 0 a 11
+      const currentMonth = currentDate.getMonth() + 1;
       const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1;
 
       const clientsCollection = collection(db, 'clientes');
-      const queryRef = query(clientsCollection, where('month', '==', currentMonth));
+      const currentMonthQuery = query(clientsCollection, where('month', '==', currentMonth));
 
       try {
-        const currentMonthSnapshot = await getDocs(queryRef);
+        const currentMonthSnapshot = await getDocs(currentMonthQuery);
         const currentMonthCount = currentMonthSnapshot.size;
 
         let lastMonthCount = 0;
         if (lastMonth !== currentMonth) {
-          const lastMonthQueryRef = query(clientsCollection, where('month', '==', lastMonth));
-          const lastMonthSnapshot = await getDocs(lastMonthQueryRef);
+          const lastMonthQuery = query(clientsCollection, where('month', '==', lastMonth));
+          const lastMonthSnapshot = await getDocs(lastMonthQuery);
           lastMonthCount = lastMonthSnapshot.size;
         }
 
@@ -44,6 +45,8 @@ const HomePage = () => {
         setGrowthPercentage(percentage.toFixed(2));
       } catch (error) {
         console.error('Erro ao calcular crescimento mensal:', error);
+      } finally {
+        setLoading(false); // Desativa o estado de carregamento
       }
     };
 
@@ -65,7 +68,9 @@ const HomePage = () => {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Últimos 5 clientes cadastrados</h2>
           <div style={styles.cardContent}>
-            {clients.length > 0 ? (
+            {loading ? (
+              <p>Carregando clientes...</p>
+            ) : clients.length > 0 ? (
               <ul style={styles.list}>
                 {clients.map((client, index) => (
                   <li key={index} style={styles.listItem}>
@@ -82,7 +87,11 @@ const HomePage = () => {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Crescimento Mensal pousada Ypuã</h2>
           <div style={styles.cardContent}>
-            <p style={styles.growthPercentage}>{growthPercentage}%</p>
+            {loading ? (
+              <p>Calculando crescimento...</p>
+            ) : (
+              <p style={styles.growthPercentage}>{growthPercentage}%</p>
+            )}
           </div>
         </div>
       </div>

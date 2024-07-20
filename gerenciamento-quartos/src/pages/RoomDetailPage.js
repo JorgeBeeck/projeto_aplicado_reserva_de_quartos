@@ -6,9 +6,9 @@ import { db } from '../firebase';
 const RoomDetailPage = () => {
   const { id } = useParams();
   const [quarto, setQuarto] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editMode, setEditMode] = useState(false); // Estado para controlar o modo de edição
+  const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     nome: '',
     descricao: '',
@@ -20,28 +20,26 @@ const RoomDetailPage = () => {
 
   useEffect(() => {
     const fetchQuarto = async () => {
-      setLoading(true);
       try {
         const docRef = doc(db, 'quartos', id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const quartoData = { id: docSnap.id, ...docSnap.data() };
           setQuarto(quartoData);
-          // Atualiza o estado do formulário com os dados do quarto
           setFormData({
             nome: quartoData.nome,
             descricao: quartoData.descricao,
             precoPorNoite: quartoData.precoPorNoite,
             ocupacaoMaxima: quartoData.ocupacaoMaxima,
             imagemUrl: quartoData.imagemUrl,
-            amenidades: quartoData.amenidades.join(', '), // Converte array de amenidades para string separada por vírgula
+            amenidades: quartoData.amenidades.join(', '),
           });
         } else {
           setError('Quarto não encontrado.');
         }
-        setLoading(false);
       } catch (error) {
         setError('Erro ao buscar informações do quarto.');
+      } finally {
         setLoading(false);
       }
     };
@@ -50,20 +48,21 @@ const RoomDetailPage = () => {
   }, [id]);
 
   const formatDate = (timestamp) => {
-    const date = timestamp.toDate(); // Converte Timestamp para Date
-    return date.toLocaleDateString('pt-BR'); // Formata a data no formato "dd/mm/yyyy"
+    if (timestamp) {
+      const date = timestamp.toDate();
+      return date.toLocaleDateString('pt-BR');
+    }
+    return '';
   };
 
-  const handleEdit = () => {
-    setEditMode(true);
-  };
+  const handleEdit = () => setEditMode(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -76,9 +75,8 @@ const RoomDetailPage = () => {
         precoPorNoite: parseFloat(formData.precoPorNoite),
         ocupacaoMaxima: parseInt(formData.ocupacaoMaxima),
         imagemUrl: formData.imagemUrl,
-        amenidades: formData.amenidades.split(',').map((item) => item.trim()), // Converte string de amenidades para array
+        amenidades: formData.amenidades.split(',').map((item) => item.trim()),
       });
-      setEditMode(false);
       setQuarto({
         ...quarto,
         nome: formData.nome,
@@ -86,8 +84,9 @@ const RoomDetailPage = () => {
         precoPorNoite: parseFloat(formData.precoPorNoite),
         ocupacaoMaxima: parseInt(formData.ocupacaoMaxima),
         imagemUrl: formData.imagemUrl,
-        amenidades: formData.amenidades.split(',').map((item) => item.trim()), // Converte string de amenidades para array
+        amenidades: formData.amenidades.split(',').map((item) => item.trim()),
       });
+      setEditMode(false);
     } catch (error) {
       console.error('Erro ao atualizar o quarto:', error);
       setError('Erro ao atualizar o quarto. Por favor, tente novamente.');
@@ -132,11 +131,11 @@ const RoomDetailPage = () => {
               </label>
               <label style={styles.label}>
                 Preço por Noite:
-                <input type="number" name="precoPorNoite" value={formData.precoPorNoite} onChange={handleChange} required style={styles.input} />
+                <input type="number" name="precoPorNoite" value={formData.precoPorNoite} onChange={handleChange} required min="0" style={styles.input} />
               </label>
               <label style={styles.label}>
                 Ocupação Máxima:
-                <input type="number" name="ocupacaoMaxima" value={formData.ocupacaoMaxima} onChange={handleChange} required style={styles.input} />
+                <input type="number" name="ocupacaoMaxima" value={formData.ocupacaoMaxima} onChange={handleChange} required min="0" style={styles.input} />
               </label>
               <label style={styles.label}>
                 Amenidades (separadas por vírgula):
@@ -313,4 +312,3 @@ const styles = {
 };
 
 export default RoomDetailPage;
-

@@ -4,7 +4,8 @@ import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
 const CreateRoomPage = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook para navegação programática
+  // Estados para armazenar os valores dos campos do formulário
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
   const [ocupacaoMaxima, setOcupacaoMaxima] = useState(1);
@@ -12,29 +13,31 @@ const CreateRoomPage = () => {
   const [precoPorNoite, setPrecoPorNoite] = useState(0);
   const [amenidades, setAmenidades] = useState([]);
   const [imagemUrl, setImagemUrl] = useState('');
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); // Estado para armazenar mensagens de erro
+  const [loading, setLoading] = useState(false); // Estado para controlar o carregamento
 
+  // Função para lidar com o envio do formulário
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault(); // Previne o comportamento padrão do formulário
+    setLoading(true); // Ativa o estado de carregamento
     try {
+      // Adiciona um novo documento na coleção 'quartos'
       await addDoc(collection(db, 'quartos'), {
         nome,
         descricao,
-        ocupacaoMaxima: parseInt(ocupacaoMaxima),
+        ocupacaoMaxima: parseInt(ocupacaoMaxima), // Converte para inteiro
         disponibilidade,
-        precoPorNoite: parseFloat(precoPorNoite),
+        precoPorNoite: parseFloat(precoPorNoite), // Converte para número de ponto flutuante
         amenidades,
         imagemUrl,
       });
       alert('Quarto criado com sucesso!');
       navigate('/rooms'); // Redireciona para a página de gerenciamento de quartos
     } catch (error) {
-      setError(error.message);
+      setError(error.message); // Armazena mensagem de erro
       alert(`Erro ao criar quarto: ${error.message}`);
     } finally {
-      setLoading(false);
+      setLoading(false); // Desativa o estado de carregamento
     }
   };
 
@@ -43,6 +46,7 @@ const CreateRoomPage = () => {
       <div style={styles.formContainer}>
         <h1 style={styles.title}>Adicionar Novo Quarto</h1>
         <form onSubmit={handleSubmit} style={styles.form}>
+          {/* Campo para o nome do quarto */}
           <label style={styles.label}>
             <p style={styles.labelText}>Nome do Quarto</p>
             <input
@@ -54,6 +58,7 @@ const CreateRoomPage = () => {
               required
             />
           </label>
+          {/* Campo para a descrição do quarto */}
           <label style={styles.label}>
             <p style={styles.labelText}>Descrição</p>
             <textarea
@@ -64,6 +69,7 @@ const CreateRoomPage = () => {
               required
             ></textarea>
           </label>
+          {/* Campo para a ocupação máxima do quarto */}
           <label style={styles.label}>
             <p style={styles.labelText}>Ocupação Máxima</p>
             <input
@@ -76,6 +82,7 @@ const CreateRoomPage = () => {
               required
             />
           </label>
+          {/* Campo para a disponibilidade do quarto */}
           <label style={styles.label}>
             <p style={styles.labelText}>Disponibilidade</p>
             <select
@@ -88,6 +95,7 @@ const CreateRoomPage = () => {
               <option value="false">Indisponível</option>
             </select>
           </label>
+          {/* Campo para o preço por noite */}
           <label style={styles.label}>
             <p style={styles.labelText}>Preço por Noite</p>
             <input
@@ -101,6 +109,7 @@ const CreateRoomPage = () => {
               required
             />
           </label>
+          {/* Campo para as amenidades do quarto */}
           <label style={styles.label}>
             <p style={styles.labelText}>Amenidades (separadas por vírgula)</p>
             <textarea
@@ -113,26 +122,30 @@ const CreateRoomPage = () => {
               required
             ></textarea>
           </label>
+          {/* Campo para a URL da imagem do quarto */}
           <label style={styles.label}>
             <p style={styles.labelText}>URL da Imagem</p>
             <input
               type="text"
-              placeholder="cole URL da Imagem"
+              placeholder="Cole URL da Imagem"
               value={imagemUrl}
               onChange={(e) => setImagemUrl(e.target.value)}
               style={styles.input}
             />
           </label>
+          {/* Botão de submissão do formulário */}
           <button type="submit" style={styles.button} disabled={loading}>
             {loading ? 'Carregando...' : 'Criar Quarto'}
           </button>
         </form>
+        {/* Mensagem de erro exibida, se houver */}
         {error && <p style={styles.error}>{error}</p>}
       </div>
     </div>
   );
 };
 
+// Estilos para o componente
 const styles = {
   container: {
     display: 'flex',
