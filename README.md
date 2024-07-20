@@ -153,7 +153,4 @@ Para criar um novo teste para seu componente, siga estes passos:
 
 ## Suporte
 
-Se você encontrar algum problema durante a instalação, configuração ou execução do projeto, sinta-se à vontade para entrar em contato com [Nome do Responsável] para obter ajuda.
-```
-
-Você pode copiar e colar este bloco diretamente no seu arquivo `README.md`. Se precisar de mais ajustes, estou à disposição!
+Se você encontrar algum problema durante a instalação, configuração ou execução do projeto, sinta-se à vontade para entrar em contato com jorge gabriel beeck borges para obter ajuda.
