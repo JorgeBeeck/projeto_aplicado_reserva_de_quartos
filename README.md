@@ -1,5 +1,3 @@
-Claro! Aqui está o README completo, pronto para ser copiado e colado em um arquivo `.md`:
-
 ```markdown
 # Instalação e Configuração do Projeto
 
