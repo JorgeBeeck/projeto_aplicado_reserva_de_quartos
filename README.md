@@ -1,4 +1,3 @@
-```markdown
 # Instalação e Configuração do Projeto
 
 Este guia fornece instruções passo a passo para instalar, configurar, testar e estender o projeto em sua máquina local.
