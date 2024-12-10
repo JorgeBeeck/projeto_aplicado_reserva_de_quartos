@@ -4,6 +4,7 @@ import { getFirestore, collection, query, orderBy, getDocs, limit } from 'fireba
 const HomePage = () => {
   const [clients, setClients] = useState([]);
   const [growthPercentage, setGrowthPercentage] = useState(0);
+  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
   const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
@@ -23,15 +24,30 @@ const HomePage = () => {
 
     const fetchReservations = async () => {
       const db = getFirestore();
-      const reservationsCollection = collection(db, 'reservas');
-      const reservationsQuery = query(reservationsCollection, orderBy('checkIn'), limit(5));
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+
+      const clientsCollection = collection(db, 'clientes');
+      const currentMonthQuery = query(clientsCollection, where('month', '==', currentMonth));
 
       try {
-        const snapshot = await getDocs(reservationsQuery);
-        const reservationsData = snapshot.docs.map(doc => doc.data());
-        setReservations(reservationsData);
+        const currentMonthSnapshot = await getDocs(currentMonthQuery);
+        const currentMonthCount = currentMonthSnapshot.size;
+
+        let lastMonthCount = 0;
+        if (lastMonth !== currentMonth) {
+          const lastMonthQuery = query(clientsCollection, where('month', '==', lastMonth));
+          const lastMonthSnapshot = await getDocs(lastMonthQuery);
+          lastMonthCount = lastMonthSnapshot.size;
+        }
+
+        const percentage = lastMonthCount === 0 ? 100 : ((currentMonthCount - lastMonthCount) / lastMonthCount) * 100;
+        setGrowthPercentage(percentage.toFixed(2));
       } catch (error) {
-        console.error('Erro ao buscar reservas:', error);
+        console.error('Erro ao calcular crescimento mensal:', error);
+      } finally {
+        setLoading(false); // Desativa o estado de carregamento
       }
     };
 
@@ -56,7 +72,9 @@ const HomePage = () => {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Últimos 5 clientes cadastrados</h2>
           <div style={styles.cardContent}>
-            {clients.length > 0 ? (
+            {loading ? (
+              <p>Carregando clientes...</p>
+            ) : clients.length > 0 ? (
               <ul style={styles.list}>
                 {clients.map((client, index) => (
                   <li key={index} style={styles.listItem}>
@@ -74,24 +92,10 @@ const HomePage = () => {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Próximas Reservas</h2>
           <div style={styles.cardContent}>
-            {reservations.length > 0 ? (
-              <ul style={styles.list}>
-                {reservations.map((reservation, index) => (
-                  <li key={index} style={styles.listItem}>
-                    <p>
-                      <strong>Cliente:</strong> {reservation.clientName}
-                    </p>
-                    <p>
-                      <strong>Check-in:</strong> {reservation.checkIn}
-                    </p>
-                    <p>
-                      <strong>Check-out:</strong> {reservation.checkOut}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+            {loading ? (
+              <p>Calculando crescimento...</p>
             ) : (
-              <p>Nenhuma reserva ativa.</p>
+              <p style={styles.growthPercentage}>{growthPercentage}%</p>
             )}
           </div>
         </div>

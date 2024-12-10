@@ -119,16 +119,19 @@ const styles = {
     textAlign: 'center',
     fontSize: '18px',
     color: '#666',
+    marginTop: '20px',
   },
   error: {
     textAlign: 'center',
     fontSize: '18px',
     color: 'red',
+    marginTop: '20px',
   },
   emptyMessage: {
     textAlign: 'center',
     fontSize: '18px',
     color: '#666',
+    marginTop: '20px',
   },
   tableContainer: {
     overflowX: 'auto',
@@ -144,7 +147,6 @@ const styles = {
     padding: '12px',
     backgroundColor: '#72B5A4',
     color: '#333',
-    padding: '10px',
     borderBottom: '2px solid #ddd',
     textAlign: 'left',
   },
@@ -162,25 +164,10 @@ const styles = {
     textDecoration: 'none',
     color: '#72B5A4',
     cursor: 'pointer',
-  },
-  '&:hover': {
+    '&:hover': {
       textDecoration: 'underline',
     },
-  emptyMessage: {
-    textAlign: 'center',
-    marginTop: '20px',
-    color: '#888',
   },
-  loading: {
-    textAlign: 'center',
-    marginTop: '20px',
-  },
-  error: {
-    color: 'red',
-    marginTop: '20px',
-    textAlign: 'center',
-  },
-  
 };
 
 export default RoomManagementPage;

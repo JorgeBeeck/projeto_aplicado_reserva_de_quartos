@@ -3,29 +3,44 @@ import { db } from '../firebase';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
 const ClientListPage = () => {
+  // Estado para armazenar a lista de clientes
   const [clients, setClients] = useState([]);
+  // Estado para controlar o carregamento dos dados
   const [loading, setLoading] = useState(true);
+  // Estado para armazenar o cliente sendo editado
   const [editClient, setEditClient] = useState(null);
+  // Estado para armazenar os valores dos campos de edição
   const [editValues, setEditValues] = useState({ name: '', cpf: '', email: '' });
 
+  // Efeito colateral para buscar clientes quando o componente é montado
   useEffect(() => {
     const fetchClients = async () => {
-      const querySnapshot = await getDocs(collection(db, 'clientes'));
-      const clientsList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setClients(clientsList);
-      setLoading(false);
+      try {
+        // Obtém todos os documentos da coleção 'clientes'
+        const querySnapshot = await getDocs(collection(db, 'clientes'));
+        // Mapeia os documentos para um formato utilizável
+        const clientsList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setClients(clientsList);
+      } catch (error) {
+        console.error("Erro ao buscar clientes:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchClients();
-  }, []);
+  }, []); // Dependência vazia para executar apenas na montagem
 
+  // Função para lidar com a exclusão de um cliente
   const handleDelete = async (id, name) => {
     if (window.confirm(`Tem certeza que deseja excluir o cliente ${name}?`)) {
       try {
+        // Remove o documento da coleção 'clientes'
         await deleteDoc(doc(db, 'clientes', id));
+        // Atualiza a lista de clientes após a exclusão
         setClients(clients.filter((client) => client.id !== id));
         alert('Cliente removido com sucesso!');
       } catch (error) {
@@ -34,19 +49,25 @@ const ClientListPage = () => {
     }
   };
 
+  // Função para iniciar o processo de edição
   const handleEdit = (client) => {
     setEditClient(client);
+    // Preenche os campos de edição com os valores atuais do cliente
     setEditValues({ name: client.name, cpf: client.cpf, email: client.email });
   };
 
+  // Função para salvar as alterações no cliente
   const handleSave = async () => {
     try {
+      // Referência ao documento do cliente a ser atualizado
       const clientRef = doc(db, 'clientes', editClient.id);
+      // Atualiza os dados do cliente
       await updateDoc(clientRef, {
         name: editValues.name,
         cpf: editValues.cpf,
         email: editValues.email,
       });
+      // Atualiza a lista de clientes com os novos valores
       setClients(clients.map((client) => 
         client.id === editClient.id ? { ...client, ...editValues } : client
       ));
@@ -57,6 +78,7 @@ const ClientListPage = () => {
     }
   };
 
+  // Exibição condicional enquanto os dados estão carregando
   if (loading) {
     return <div>Carregando...</div>;
   }
@@ -64,6 +86,7 @@ const ClientListPage = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Lista de Clientes</h1>
+      {/* Formulário de edição exibido quando um cliente está sendo editado */}
       {editClient ? (
         <div style={styles.editForm}>
           <h2>Editar Cliente</h2>
@@ -102,12 +125,14 @@ const ClientListPage = () => {
             </tr>
           </thead>
           <tbody>
+            {/* Renderiza a lista de clientes */}
             {clients.map((client) => (
               <tr key={client.id} style={styles.row}>
                 <td style={styles.td}>{client.name}</td>
                 <td style={styles.td}>{client.cpf}</td>
                 <td style={styles.td}>{client.email}</td>
                 <td style={styles.td}>
+                  {/* Botões de ação para editar e excluir clientes */}
                   <button style={styles.editButton} onClick={() => handleEdit(client)}>Editar</button>
                   <button style={styles.deleteButton} onClick={() => handleDelete(client.id, client.name)}>Excluir</button>
                 </td>
@@ -120,6 +145,7 @@ const ClientListPage = () => {
   );
 };
 
+// Estilos para o componente
 const styles = {
   container: {
     padding: '20px',
