@@ -110,9 +110,9 @@ const Sidebar = () => {
         <h2 style={{ color: '#fff', marginBottom: '20px' }}>Pousada Ypuã</h2>
         <ul style={ulStyles}>
           <li style={liStyles}><Link to="/home" style={linkStyles} className="sidebar-link">Dashboard</Link></li>
-          <li style={liStyles}><Link to="/rooms" style={linkStyles} className="sidebar-link">Gerenciar Quartos</Link></li>
-          <li style={liStyles}><Link to="/reserve-room" style={linkStyles} className="sidebar-link">Reservar quarto</Link></li>
+          <li style={liStyles}><Link to="/rooms" style={linkStyles} className="sidebar-link">Quartos</Link></li>
           <li style={liStyles}><Link to="/create-room" style={linkStyles} className="sidebar-link">Adicionar quarto</Link></li>
+          <li style={liStyles}><Link to="/reserve-room" style={linkStyles} className="sidebar-link">Reservar quarto</Link></li>
           <li style={liStyles}><Link to="/register-client" style={linkStyles} className="sidebar-link">Cadastrar Cliente</Link></li>
           <li style={liStyles}><Link to="/client-list" style={linkStyles} className="sidebar-link">Lista de Clientes</Link></li>
           {/* Adicionar mais links conforme necessário */}

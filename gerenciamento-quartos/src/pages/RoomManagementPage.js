@@ -63,13 +63,42 @@ const RoomManagementPage = () => {
                       Ver Detalhes
                     </Link>
                   </td>
+
                 </tr>
+                
+
               ))}
             </tbody>
           </table>
+
         </div>
+
+      
       )}
     </div>
+  );
+};
+
+const YourComponent = () => {
+  const liStyles = {
+    listStyleType: 'none',
+    margin: '10px 0',
+  };
+
+  const linkStyles = {
+    textDecoration: 'none',
+    color: '#007bff',
+    fontWeight: 'bold',
+  };
+
+  return (
+    <ul>
+      <li style={liStyles}>
+        <Link to="/create-room" style={linkStyles} className="sidebar-link">
+          Adicionar quarto
+        </Link>
+      </li>
+    </ul>
   );
 };
 

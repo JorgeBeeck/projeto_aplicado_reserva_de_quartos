@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, query, orderBy, getDocs, limit, where } from 'firebase/firestore';
+import { getFirestore, collection, query, orderBy, getDocs, limit } from 'firebase/firestore';
 
 const HomePage = () => {
   const [clients, setClients] = useState([]);
   const [growthPercentage, setGrowthPercentage] = useState(0);
+  const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -20,35 +21,22 @@ const HomePage = () => {
       }
     };
 
-    const fetchGrowthPercentage = async () => {
+    const fetchReservations = async () => {
       const db = getFirestore();
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1; // getMonth() retorna de 0 a 11
-      const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1;
-
-      const clientsCollection = collection(db, 'clientes');
-      const queryRef = query(clientsCollection, where('month', '==', currentMonth));
+      const reservationsCollection = collection(db, 'reservas');
+      const reservationsQuery = query(reservationsCollection, orderBy('checkIn'), limit(5));
 
       try {
-        const currentMonthSnapshot = await getDocs(queryRef);
-        const currentMonthCount = currentMonthSnapshot.size;
-
-        let lastMonthCount = 0;
-        if (lastMonth !== currentMonth) {
-          const lastMonthQueryRef = query(clientsCollection, where('month', '==', lastMonth));
-          const lastMonthSnapshot = await getDocs(lastMonthQueryRef);
-          lastMonthCount = lastMonthSnapshot.size;
-        }
-
-        const percentage = lastMonthCount === 0 ? 100 : ((currentMonthCount - lastMonthCount) / lastMonthCount) * 100;
-        setGrowthPercentage(percentage.toFixed(2));
+        const snapshot = await getDocs(reservationsQuery);
+        const reservationsData = snapshot.docs.map(doc => doc.data());
+        setReservations(reservationsData);
       } catch (error) {
-        console.error('Erro ao calcular crescimento mensal:', error);
+        console.error('Erro ao buscar reservas:', error);
       }
     };
 
     fetchClients();
-    fetchGrowthPercentage();
+    fetchReservations();
   }, []);
 
   const getCurrentDate = () => {
@@ -58,10 +46,13 @@ const HomePage = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.welcomeTitle}>Olá, Colaborador!</h1>
-      <h1 style={styles.welcomeSubtitle}>Acesse o menu lateral para acessar as funções de gerenciamento do sistema</h1>
-      <h2 style={styles.dateTitle}>Hoje é dia {getCurrentDate()}</h2>
+      <h1 style={styles.welcomeTitle}> Pousada Quinta do Ypuã</h1>
+      <h2 style={styles.welcomeSubtitle}>
+      Olá, Colaborador!
+      </h2>
+
       <div style={styles.gridContainer}>
+        {/* Últimos clientes */}
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Últimos 5 clientes cadastrados</h2>
           <div style={styles.cardContent}>
@@ -69,21 +60,49 @@ const HomePage = () => {
               <ul style={styles.list}>
                 {clients.map((client, index) => (
                   <li key={index} style={styles.listItem}>
-                    <p>{client}</p>
+                    {client}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p>Nenhum cliente registrado</p>
+              <p>Nenhum cliente registrado.</p>
             )}
           </div>
         </div>
 
+        {/* Reservas Ativas */}
         <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Crescimento Mensal pousada Ypuã</h2>
+          <h2 style={styles.cardTitle}>Próximas Reservas</h2>
           <div style={styles.cardContent}>
-            <p style={styles.growthPercentage}>{growthPercentage}%</p>
+            {reservations.length > 0 ? (
+              <ul style={styles.list}>
+                {reservations.map((reservation, index) => (
+                  <li key={index} style={styles.listItem}>
+                    <p>
+                      <strong>Cliente:</strong> {reservation.clientName}
+                    </p>
+                    <p>
+                      <strong>Check-in:</strong> {reservation.checkIn}
+                    </p>
+                    <p>
+                      <strong>Check-out:</strong> {reservation.checkOut}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Nenhuma reserva ativa.</p>
+            )}
           </div>
+        </div>
+
+        {/* Crescimento Mensal */}
+        <div style={styles.card}>
+          <h2 style={styles.cardTitle}>Crescimento Mensal</h2>
+          <div style={styles.cardContent}>
+            <h2 style={styles.growthPercentage}>{growthPercentage}%</h2>
+          </div>
+          <h3 style={styles.dateTitle}>Hoje: {getCurrentDate()}</h3>
         </div>
       </div>
     </div>
@@ -95,71 +114,66 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     minHeight: '100vh',
-    padding: '20px',
+    padding: '40px 20px',
     backgroundColor: '#f0f0f0',
   },
   welcomeTitle: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '2.5rem',
+    fontSize: '2.8rem',
     color: '#333',
-    marginBottom: '10px',
+    marginBottom: '15px',
+    textAlign: 'center',
   },
   welcomeSubtitle: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '1.5rem',
+    fontSize: '1.6rem',
     color: '#333',
-    marginBottom: '10px',
-  },
-  dateTitle: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '1.5rem',
-    color: '#666',
-    marginBottom: '20px',
+    marginBottom: '30px',
+    textAlign: 'center',
   },
   gridContainer: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
     gap: '20px',
-    maxWidth: '800px',
     width: '100%',
-    margin: '0 auto',
+    maxWidth: '1200px',
   },
   card: {
     backgroundColor: '#F79A87',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '10px',
     padding: '20px',
-    boxSizing: 'border-box',
     color: '#fff',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
   cardTitle: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '2rem',
-    color: '#fff',
-    borderBottom: '2px solid #fff',
+    fontSize: '1.8rem',
+    borderBottom: '2px solid rgba(255, 255, 255, 0.6)',
     paddingBottom: '10px',
-    marginBottom: '10px',
+    marginBottom: '15px',
     fontWeight: 'bold',
   },
   cardContent: {
-    marginTop: '10px',
+    fontSize: '1rem',
+    lineHeight: '1.5',
   },
   list: {
-    listStyleType: 'none',
+    listStyle: 'none',
     padding: 0,
   },
   listItem: {
     padding: '10px 0',
-    borderBottom: '1px solid #ddd',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
   },
   growthPercentage: {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '3rem',
-    fontWeight: 'bold',
+    fontSize: '2.5rem',
     textAlign: 'center',
   },
+  dateTitle: {
+    fontSize: '1.2rem',
+    textAlign: 'center',
+    marginTop: '10px',
+  },
+  
 };
 
 export default HomePage;
